@@ -84,7 +84,7 @@ python tools/train.py \
         wandb-project runs-alex \
         wandb-entity team-noobtoss \
         wandb-name $EXP_NAME \
-        wandb-log_checkpoints False
+        wandb-log_checkpoints False \
     output_dir $OUTPUT_DIR \
     data_dir $DATA_DIR \
     $PARAMS

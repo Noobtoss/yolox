@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=yolox_train_arr # Kurzname des Jobs
-#SBATCH --array=82-85%4
+#SBATCH --array=99-101%4
 #SBATCH --output=logs/R-%A-%a.out
 #SBATCH --partition=p2,p6             # p4
 #SBATCH --qos=gpuultimate
@@ -27,6 +27,8 @@ for ((i=0; i<${#ARR[@]}; i+=2)); do
     KV["$key"]="$value"
 done
 [[ "$PARAMS" != *"seed"* ]] && PARAMS="$PARAMS seed ${SLURM_ARRAY_JOB_ID}"
+
+echo $KV
 
 OUTPUT_DIR="${BASE_DIR}/runs"
 EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
@@ -63,7 +65,7 @@ python tools/train.py \
         wandb-project runs-yolox \
         wandb-entity team-noobtoss \
         wandb-name $EXP_NAME \
-        wandb-log_checkpoints False
+        wandb-log_checkpoints False \
     output_dir $OUTPUT_DIR \
     $PARAMS
 
