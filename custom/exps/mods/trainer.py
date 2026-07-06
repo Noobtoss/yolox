@@ -97,7 +97,7 @@ class Trainer(_Trainer):
                     self.tblogger.add_scalar(k, v, self.epoch + 1)
             if self.args.logger == "wandb":
                 self.wandb_logger.log_metrics({**metrics, "train/epoch": self.epoch + 1})
-                self.wandb_logger.log_images(predictions)
+                # self.wandb_logger.log_images(predictions)
             if self.args.logger == "mlflow":
                 logs = {**metrics, "val/best_ap": round(self.best_ap, 3), "train/epoch": self.epoch + 1}
                 self.mlflow_logger.on_log(self.args, self.exp, self.epoch+1, logs)
