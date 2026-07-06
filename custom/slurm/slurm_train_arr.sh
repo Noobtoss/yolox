@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=yolox_train_arr # Kurzname des Jobs
-#SBATCH --array=99-101%4
+#SBATCH --array=1-7%4
 #SBATCH --output=logs/R-%A-%a.out
 #SBATCH --partition=p2,p6             # p4
 #SBATCH --qos=gpuultimate
@@ -44,13 +44,14 @@ conda activate conda-yolox
 
 export PYTHONPATH="$BASE_DIR:$PYTHONPATH"
 
-export TMPDIR=/nfs/scratch/staff/schmittth/tmp
+export TMPDIR=$TMPDIR/yolox_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
-export WANDB_DIR=/nfs/scratch/staff/schmittth/tmp
-export WANDB_CACHE_DIR=/nfs/scratch/staff/schmittth/tmp
-export WANDB_CONFIG_DIR=/nfs/scratch/staff/schmittth/tmp
+export WANDB_CACHE_DIR=$TMPDIR
+export WANDB_DATA_DIR=$TMPDIR
+export WANDB_DIR=$TMPDIR
+export WANDB_CONFIG_DIR=$TMPDIR
 
 # ----- TRAINING ----------------------------------------------------
 python tools/train.py \
@@ -70,5 +71,7 @@ python tools/train.py \
     $PARAMS
 
 # ----- CLEANUP -----------------------------------------------------
+wandb sync --sync-all || true
+rm -rf "$TMPDIR"
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
 eval find "$OUTPUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
