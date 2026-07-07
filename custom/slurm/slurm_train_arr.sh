@@ -44,7 +44,7 @@ conda activate conda-yolox
 
 export PYTHONPATH="$BASE_DIR:$PYTHONPATH"
 
-export TMPDIR=$TMPDIR/yolox_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
+export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
