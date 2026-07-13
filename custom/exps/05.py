@@ -13,7 +13,7 @@ class Exp(_Exp):
         # ---------------- dataloader config ---------------- #
 
         # Define yourself dataset path
-        self.data_dir = "datasets/Images05"
+        self.data_dir = "datasets/05"
         self.train_ann = "annotation_train.json"
         self.val_ann = "annotation_test.json"
 

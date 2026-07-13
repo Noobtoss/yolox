@@ -17,7 +17,7 @@ class Exp(ExpMetaFood2026):
         # ---------------- dataloader config ---------------- #
 
         # Define yourself dataset path
-        self.data_dir = "datasets/Images05MetaFood2026"
+        self.data_dir = "datasets/05MetaFood2026"
         self.train_ann = "annotation_train.json"
         self.val_ann = "annotation_test.json"
 

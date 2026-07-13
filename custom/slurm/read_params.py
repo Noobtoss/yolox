@@ -26,7 +26,7 @@ def parse_experiments(text: str, task_ids: list[int]) -> list[str]:
     return experiments
 
 if __name__ == "__main__":
-    array_str = "1-7%4"
+    array_str = "1,8-19%4"
     task_ids  = parse_array_ids(array_str)
 
     with open("slurm_params.txt", "r") as f:

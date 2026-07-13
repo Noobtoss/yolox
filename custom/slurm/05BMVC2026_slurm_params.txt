@@ -1,0 +1,58 @@
+# Experiments MetaFood2026
+exp_name 05MetaFood2026_baseline exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name 05MetaFood2026_scl1     exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 1
+exp_name 05MetaFood2026_scl2     exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 2
+exp_name 05MetaFood2026_scl4     exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 4
+exp_name 05MetaFood2026_scl6     exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 6
+exp_name 05MetaFood2026_scl8     exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 8
+exp_name 05MetaFood2026_scl10    exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 10
+exp_name 05MetaFood2026_scl12    exp custom/exps/05MetaFood2026.py ckpt checkpoints/yolox_x.pth cls_feat 12
+# Experiments BMVC2026 - SupConLoss
+exp_name 05BMVC2026_baseline exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name 05BMVC2026_scl1     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 1
+exp_name 05BMVC2026_scl2     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 2
+exp_name 05BMVC2026_scl4     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 4
+exp_name 05BMVC2026_scl6     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 6
+exp_name 05BMVC2026_scl8     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 8
+exp_name 05BMVC2026_scl10    exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 10
+# Experiments BMVC2026 - MultiSimLoss
+exp_name 05BMVC2026_msl2     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 2
+exp_name 05BMVC2026_msl4     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 4
+exp_name 05BMVC2026_msl6     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 6
+exp_name 05BMVC2026_msl8     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 8
+exp_name 05BMVC2026_msl10    exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 10
+exp_name 05BMVC2026_msl12    exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 12
+# Experiments BMVC2026 - CircleLoss
+exp_name 05BMVC2026_cl002    exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.02
+exp_name 05BMVC2026_cl005    exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.05
+exp_name 05BMVC2026_cl01     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.1
+exp_name 05BMVC2026_cl02     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.2
+exp_name 05BMVC2026_cl05     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.5
+exp_name 05BMVC2026_cl10     exp custom/exps/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 1.0
+# Experiments Oktoberfest
+exp_name Oktoberfest_baseline exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name Oktoberfest_scl4     exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat 4
+exp_name Oktoberfest_scl6     exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat 6
+exp_name Oktoberfest_scl8     exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat 8
+exp_name Oktoberfest_baseline exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0
+exp_name Oktoberfest_cl005    exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.05
+exp_name Oktoberfest_cl01     exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.1
+exp_name Oktoberfest_cl015    exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.15
+exp_name Oktoberfest_baseline exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 0
+exp_name Oktoberfest_msl6     exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 6
+exp_name Oktoberfest_msl8     exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 8
+exp_name Oktoberfest_msl10    exp custom/exps/Oktoberfest.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 10
+# Experiments UNIMIB2016
+exp_name UNIMIB2016_baseline  exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name UNIMIB2016_scl4      exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat 4
+exp_name UNIMIB2016_scl6      exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat 6
+exp_name UNIMIB2016_scl8      exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat 8
+exp_name UNIMIB2016_baseline  exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0
+exp_name UNIMIB2016_cl005     exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.05
+exp_name UNIMIB2016_cl01      exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.1
+exp_name UNIMIB2016_cl015     exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.15
+exp_name UNIMIB2016_baseline  exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 0
+exp_name UNIMIB2016_msl6      exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 6
+exp_name UNIMIB2016_msl8      exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 8
+exp_name UNIMIB2016_msl10     exp custom/exps/UNIMIB2016.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 10
+# Experiments End Current

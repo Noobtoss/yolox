@@ -26,7 +26,7 @@ class Exp(ExpACCV2026):
         # ---------------- dataloader config ---------------- #
 
         # Define yourself dataset path
-        self.data_dir = "datasets/Images05ACCV2026Plus"
+        self.data_dir = "datasets/05ACCV2026Plus"
         self.train_ann = "annotation_train.json"
         self.val_ann = "annotation_test.json"
 
