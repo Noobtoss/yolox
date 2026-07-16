@@ -9,7 +9,7 @@ from .semmel_names import names_05 as SEMMEL_NAMES
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# THS example usage: python overrides/python/export_coreml.py --output-name Images07Mueller.mlpackage --ckpt results/Images07Mueller/best_ckpt.pth --exp_file overrides/exps/Images07Mueller.py
+# THS example usage: python overrides/python/export_coreml.py --output-name Images07Mueller.mlpackage --ckpt results/Images07Mueller/best_ckpt.pth --exp_file overrides/src/Images07Mueller.py
 
 def make_parser():
     """Create and return the argument parser."""

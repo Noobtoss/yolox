@@ -30,7 +30,7 @@ done
 
 OUT_DIR="${ROOT_DIR}/tmp"
 EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
-CFG="${KV[cfg]:-custom/exps/Images04.py}"
+CFG="${KV[cfg]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
 
 # ----- ENVIRONMENT SETUP -------------------------------------------

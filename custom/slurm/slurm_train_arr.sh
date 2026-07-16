@@ -32,7 +32,7 @@ echo $KV
 
 OUT_DIR="${ROOT_DIR}/runs"
 EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
-EXP="${KV[exp]:-custom/exps/Images04.py}"
+EXP="${KV[exp]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
 
 # ----- ENVIRONMENT SETUP -------------------------------------------

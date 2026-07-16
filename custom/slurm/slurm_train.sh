@@ -13,7 +13,7 @@
 ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
 
 # ----- GET ARGS ----------------------------------------------------
-EXP=${1:-custom/exps/Images04.py}
+EXP=${1:-custom/src/Images04.py}
 CKPT=${2:-checkpoints/yolox_x.pth}
 
 # ----- ENVIRONMENT SETUP -------------------------------------------
