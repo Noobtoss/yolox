@@ -28,7 +28,7 @@ for ((i=0; i<${#ARR[@]}; i+=2)); do
 done
 [[ "$PARAMS" != *"seed"* ]] && PARAMS="$PARAMS seed ${SLURM_ARRAY_JOB_ID}"
 
-OUTPUT_DIR="${ROOT_DIR}/tmp"
+OUT_DIR="${ROOT_DIR}/tmp"
 EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
 CFG="${KV[cfg]:-custom/exps/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
@@ -63,9 +63,9 @@ python tools/train.py \
         wandb-project tmp \
         wandb-entity team-noobtoss \
         wandb-name $EXP_NAME \
-    output_dir $OUTPUT_DIR \
+    output_dir $OUT_DIR \
     $PARAMS
 
 # ----- CLEANUP -----------------------------------------------------
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
-eval find "$OUTPUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
+eval find "$OUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete

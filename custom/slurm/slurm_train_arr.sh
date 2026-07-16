@@ -30,7 +30,7 @@ done
 
 echo $KV
 
-OUTPUT_DIR="${ROOT_DIR}/runs"
+OUT_DIR="${ROOT_DIR}/runs"
 EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
 EXP="${KV[exp]:-custom/exps/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
@@ -67,11 +67,11 @@ python tools/train.py \
         wandb-entity team-noobtoss \
         wandb-name $EXP_NAME \
         wandb-log_checkpoints False \
-    output_dir $OUTPUT_DIR \
+    output_dir $OUT_DIR \
     $PARAMS
 
 # ----- CLEANUP -----------------------------------------------------
 wandb sync --sync-all || true
 rm -rf "$TMPDIR"
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
-eval find "$OUTPUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
+eval find "$OUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
