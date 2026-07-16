@@ -9,8 +9,8 @@
 #SBATCH --cpus-per-task=1        # CPU Kerne pro Task (>1 für multi-threaded Tasks)
 #SBATCH --mem-per-cpu=64G        # RAM pro CPU Kern #20G #32G #64G
 
-# ----- BASE_DIR ----------------------------------------------------
-BASE_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
+# ----- ROOT_DIR ----------------------------------------------------
+ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
 
 # ----- GET ARGS ----------------------------------------------------
 EXP=${1:-custom/exps/Images04.py}
@@ -33,12 +33,12 @@ export WANDB_CONFIG_DIR=/nfs/scratch/staff/schmittth/tmp
 
 # ----- TRAINING ----------------------------------------------------
 python tools/train.py \
-    --exp_file $BASE_DIR/$EXP \
+    --exp_file $ROOT_DIR/$EXP \
     --devices 1 \
     --batch-size 8 \
     --fp16 \
     --occup \
-    --ckpt $BASE_DIR/$CKPT \
+    --ckpt $ROOT_DIR/$CKPT \
     --cache \
     --logger wandb \
         wandb-project runs \
