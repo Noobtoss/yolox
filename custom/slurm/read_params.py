@@ -1,6 +1,6 @@
 import re
 
-def parse_array_ids(array_str: str) -> list[int]:
+def parse_array_ids(array_str):
     array_str = array_str.split('#')[0].strip()
     array_str = re.sub(r'%\d+', '', array_str).strip()
     ids = []
@@ -12,7 +12,7 @@ def parse_array_ids(array_str: str) -> list[int]:
             ids.append(int(part))
     return ids
 
-def parse_experiments(text: str, task_ids: list[int]) -> list[str]:
+def parse_experiments(text, task_ids):
     lines = [l.strip() for l in text.splitlines() if l.strip() and not l.strip().startswith('#')]
     experiments = []
     for task_id in task_ids:
