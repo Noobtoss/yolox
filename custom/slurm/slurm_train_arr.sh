@@ -42,8 +42,7 @@ eval "$(conda shell.bash hook)"
 
 conda activate conda-yolox
 
-export PYTHONPATH="$ROOT_DIR:$PYTHONPATH"
-
+export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
 export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- WANDB -------------------------------------------------------

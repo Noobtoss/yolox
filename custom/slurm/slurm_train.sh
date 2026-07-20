@@ -23,6 +23,7 @@ eval "$(conda shell.bash hook)"
 
 conda activate conda-yolox
 
+export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
 export TMPDIR=/nfs/scratch/staff/schmittth/tmp
 
 # ----- WANDB -------------------------------------------------------
