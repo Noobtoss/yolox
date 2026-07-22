@@ -69,17 +69,17 @@ class COCOEvaluator(_COCOEvaluator):
                 cocoEval_agnostic.accumulate()
                 cocoEval_agnostic.summarize()
                 # AP ignoring class 0
-                cocoEval_no0 = COCOeval(cocoGt, cocoDt, annType[1])
-                cocoEval_no0.params.catIds = [c for c in cocoGt.getCatIds() if c != 0]
-                cocoEval_no0.evaluate()
-                cocoEval_no0.accumulate()
-                cocoEval_no0.summarize()
+                cocoEval_0p = COCOeval(cocoGt, cocoDt, annType[1])
+                cocoEval_0p.params.catIds = [c for c in cocoGt.getCatIds() if c != 0]
+                cocoEval_0p.evaluate()
+                cocoEval_0p.accumulate()
+                cocoEval_0p.summarize()
                 # AP ignoring classes below 22
-                cocoEval_new = COCOeval(cocoGt, cocoDt, annType[1])
-                cocoEval_new.params.catIds = [c for c in cocoGt.getCatIds() if c >= 22]
-                cocoEval_new.evaluate()
-                cocoEval_new.accumulate()
-                cocoEval_new.summarize()
+                cocoEval_22p = COCOeval(cocoGt, cocoDt, annType[1])
+                cocoEval_22p.params.catIds = [c for c in cocoGt.getCatIds() if c >= 22]
+                cocoEval_22p.evaluate()
+                cocoEval_22p.accumulate()
+                cocoEval_22p.summarize()
             # <<< MOD
             cocoEval = COCOeval(cocoGt, cocoDt, annType[1])
             cocoEval.evaluate()
@@ -101,8 +101,8 @@ class COCOEvaluator(_COCOEvaluator):
                 "metrics/mAP50-95": cocoEval.stats[0],
                 "metrics/mAP50": cocoEval.stats[1],
                 "metrics/mAP50-95_agnostic": cocoEval_agnostic.stats[0],
-                "metrics/mAP50-95_No0": cocoEval_no0.stats[0],
-                "metrics/mAP50-95_New": cocoEval_new.stats[0],
+                "metrics/mAP50-95_0p": cocoEval_0p.stats[0],
+                "metrics/mAP50-95_22p": cocoEval_22p.stats[0],
             }
             return metrics, info
         else:
