@@ -17,8 +17,6 @@ ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
 PARAMS_FILE="$ROOT_DIR/custom/slurm/slurm_params.txt"
 PARAMS=$(grep -v '^[[:space:]]*#' "$PARAMS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
 
-# Add SLURM_ARRAY_JOB_ID and SLURM_ARRAY_TASK_ID to exp_name
-PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+[^[:space:]]+)/\1_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}/")
 declare -A KV
 read -r -a ARR <<< "$PARAMS"
 for ((i=0; i<${#ARR[@]}; i+=2)); do
@@ -31,9 +29,12 @@ done
 echo $KV
 
 OUT_DIR="${ROOT_DIR}/runs"
-EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
+RUN_NAME="${KV[exp_name]:-unnamed_run}"
+RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 EXP="${KV[exp]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
+
+PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
 
 # ----- ENVIRONMENT SETUP -------------------------------------------
 module purge
@@ -64,7 +65,7 @@ python tools/train.py \
     --logger wandb \
         wandb-project runs-yolox \
         wandb-entity team-noobtoss \
-        wandb-name $EXP_NAME \
+        wandb-name $RUN_NAME \
         wandb-log_checkpoints False \
     output_dir $OUT_DIR \
     $PARAMS
@@ -73,4 +74,4 @@ python tools/train.py \
 wandb sync --sync-all || true
 rm -rf "$TMPDIR"
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
-eval find "$OUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
+eval find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
