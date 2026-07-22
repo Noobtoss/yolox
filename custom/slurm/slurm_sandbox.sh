@@ -17,8 +17,6 @@ ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
 PARAMS_FILE="$ROOT_DIR/custom/slurm/slurm_params.txt"
 PARAMS=$(grep -v '^[[:space:]]*#' "$PARAMS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
 
-# Add SLURM_ARRAY_JOB_ID and SLURM_ARRAY_TASK_ID to exp_name
-PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+[^[:space:]]+)/\1_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}/")
 declare -A KV
 read -r -a ARR <<< "$PARAMS"
 for ((i=0; i<${#ARR[@]}; i+=2)); do
@@ -28,10 +26,13 @@ for ((i=0; i<${#ARR[@]}; i+=2)); do
 done
 [[ "$PARAMS" != *"seed"* ]] && PARAMS="$PARAMS seed ${SLURM_ARRAY_JOB_ID}"
 
-OUT_DIR="${ROOT_DIR}/tmp"
-EXP_NAME="${KV[exp_name]:-unnamed_experiment}"
-CFG="${KV[cfg]:-custom/src/Images04.py}"
+OUT_DIR="${ROOT_DIR}/runs"
+RUN_NAME="${KV[exp_name]:-unnamed_run}"
+RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+EXP="${KV[exp]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
+
+PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
 
 # ----- ENVIRONMENT SETUP -------------------------------------------
 module purge
@@ -41,17 +42,18 @@ eval "$(conda shell.bash hook)"
 conda activate conda-yolox
 
 export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
-export TMPDIR=/nfs/scratch/staff/schmittth/tmp
+export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
-export WANDB_DIR=/nfs/scratch/staff/schmittth/tmp
-export WANDB_CACHE_DIR=/nfs/scratch/staff/schmittth/tmp
-export WANDB_CONFIG_DIR=/nfs/scratch/staff/schmittth/tmp
+export WANDB_CACHE_DIR=$TMPDIR
+export WANDB_DATA_DIR=$TMPDIR
+export WANDB_DIR=$TMPDIR
+export WANDB_CONFIG_DIR=$TMPDIR
 
 # ----- TRAINING ----------------------------------------------------
 python tools/train.py \
-    --exp_file $ROOT_DIR/$CFG \
+    --exp_file $ROOT_DIR/$EXP \
     --devices 1 \
     --batch-size 8 \
     --fp16 \
@@ -61,10 +63,13 @@ python tools/train.py \
     --logger wandb \
         wandb-project tmp \
         wandb-entity team-noobtoss \
-        wandb-name $EXP_NAME \
+        wandb-name $RUN_NAME \
+        wandb-log_checkpoints False \
     output_dir $OUT_DIR \
     $PARAMS
 
 # ----- CLEANUP -----------------------------------------------------
+wandb sync --sync-all || true
+rm -rf "$TMPDIR"
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
-eval find "$OUT_DIR/$EXP_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
+eval find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete

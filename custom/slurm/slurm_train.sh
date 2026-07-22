@@ -24,13 +24,14 @@ eval "$(conda shell.bash hook)"
 conda activate conda-yolox
 
 export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
-export TMPDIR=/nfs/scratch/staff/schmittth/tmp
+export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
-export WANDB_DIR=/nfs/scratch/staff/schmittth/tmp
-export WANDB_CACHE_DIR=/nfs/scratch/staff/schmittth/tmp
-export WANDB_CONFIG_DIR=/nfs/scratch/staff/schmittth/tmp
+export WANDB_CACHE_DIR=$TMPDIR
+export WANDB_DATA_DIR=$TMPDIR
+export WANDB_DIR=$TMPDIR
+export WANDB_CONFIG_DIR=$TMPDIR
 
 # ----- TRAINING ----------------------------------------------------
 python tools/train.py \
