@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1        # CPU Kerne pro Task (>1 für multi-threaded Tasks)
 #SBATCH --mem-per-cpu=64G        # RAM pro CPU Kern #20G #32G #64G
 
-# ----- ROOT_DIR ----------------------------------------------------
+# ----- DIRS --------------------------------------------------------
 ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
 export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
