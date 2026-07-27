@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=yolox_train_arr # Kurzname des Jobs
-#SBATCH --array=1,8-19%4
+#SBATCH --array=1%4
 #SBATCH --output=logs/R-%A-%a.out
 #SBATCH --partition=p2,p6             # p4
 #SBATCH --qos=gpuultimate
@@ -72,4 +72,4 @@ python tools/train.py \
 wandb sync --sync-all || true
 rm -rf "$TMPDIR"
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
-eval find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
+find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name "%s"' "${KEEP_FILES[@]}") -delete
