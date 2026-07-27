@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=yolox_train        # Kurzname des Jobs
-#SBATCH --output=logs/R-%j.out
+#SBATCH --output=logs/R_%j.out
 #SBATCH --partition=p2
 #SBATCH --qos=gpuultimate
 #SBATCH --gres=gpu:1
