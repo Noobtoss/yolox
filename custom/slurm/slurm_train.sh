@@ -11,6 +11,7 @@
 
 # ----- ROOT_DIR ----------------------------------------------------
 ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
+export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- GET ARGS ----------------------------------------------------
 EXP=${1:-custom/src/Images04.py}
@@ -24,7 +25,6 @@ eval "$(conda shell.bash hook)"
 conda activate conda-yolox
 
 export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
-export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
