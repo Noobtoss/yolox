@@ -20,8 +20,8 @@ CKPT=${2:-checkpoints/yolox_x.pth}
 # ----- ENVIRONMENT SETUP -------------------------------------------
 module purge
 module load python/anaconda3
-eval "$(conda shell.bash hook)"
 
+eval "$(conda shell.bash hook)"
 conda activate conda-yolox
 
 export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"

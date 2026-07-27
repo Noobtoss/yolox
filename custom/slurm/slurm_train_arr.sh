@@ -38,8 +38,8 @@ PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_
 # ----- ENVIRONMENT SETUP -------------------------------------------
 module purge
 module load python/anaconda3
-eval "$(conda shell.bash hook)"
 
+eval "$(conda shell.bash hook)"
 conda activate conda-yolox
 
 export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
