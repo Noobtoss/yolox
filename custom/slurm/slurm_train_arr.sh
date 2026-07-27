@@ -69,7 +69,8 @@ python tools/train.py \
     $PARAMS
 
 # ----- CLEANUP -----------------------------------------------------
+KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
+
 wandb sync --sync-all || true
 rm -rf "$TMPDIR"
-KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
 find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name %s' "${KEEP_FILES[@]}") -delete
