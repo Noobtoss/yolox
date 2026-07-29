@@ -160,11 +160,13 @@ class ClsFeatLoss(nn.Module):
     def forward(
             self,
             cls_feats: torch.Tensor,
-            target_scores: torch.Tensor,
+            target_cls: torch.Tensor = None,
+            target_scores: torch.Tensor = None,
             *args, **kwargs
     ) -> torch.Tensor:
+        if target_cls is None:
+            target_cls = target_scores.max(-1).indices
         loss = torch.tensor(0.0, device=cls_feats.device)
-        target_cls = target_scores.max(-1).indices
         if self.mask is not None:
             mask = self.mask(cls_feats=cls_feats, target_scores=target_scores, *args, **kwargs)
             if not mask.sum():
