@@ -4,7 +4,7 @@ import torch.nn as nn
 
 from .exp import Exp as _Exp
 from .cls_feat_loss import ClsFeatLoss
-from .cls_feat_proj_head import ClsFeatProjHeadFactory
+from .cls_feat_proj_head import ClsFeatProjHead
 
 
 # THS, Copied from yolox.exp.yolox_base.py
@@ -127,7 +127,11 @@ class Exp(_Exp):
 
             kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
             cls_feat_loss = getattr(self, "_cls_feat_loss", None) or ClsFeatLoss(**kwargs)
-            cls_feat_proj_head = getattr(self, "_cls_feat_proj_head", None) or ClsFeatProjHeadFactory.get(**kwargs)
+            cls_feat_proj_head = (
+                (getattr(self, "_cls_feat_proj_head", None) or ClsFeatProjHead(**kwargs))
+                if kwargs["proj_head"] is not None
+                else None
+            )
 
             head = YOLOXHead(self.num_classes, self.width, in_channels=in_channels, act=self.act,
                              cls_feat=float(self.cls_feat) if self.cls_feat is not None else None,

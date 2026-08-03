@@ -1,7 +1,6 @@
 import os
-import warnings
 
-from mods import ClsFeatLoss, ClsFeatProjHeadFactory, ExpACCV2026
+from mods import ExpACCV2026
 
 EXP_FLOAT_VALUES = {"cls_feat", "train_subset_pct", "train_min_cls_pct"}
 
@@ -17,7 +16,7 @@ class Exp(ExpACCV2026):
         super().__init__()
         self.cls_feat_dim = 320  # hard encoding dangerous
         self.cls_feat = 0
-        self.cls_feat_loss = "sup_con_loss"  # ClsFeatLossFactory.get("sup_con_loss", temperature=self.cls_feat_temperature)
+        self.cls_feat_loss = "sup_con_loss"
         self.cls_feat_temperature = 0.07
 
         self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]

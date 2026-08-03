@@ -1,7 +1,6 @@
 import os
-import warnings
 
-from mods import ClsFeatLoss, ClsFeatProjHeadFactory, ExpACCV2026
+from mods import ClsFeatLoss, ClsFeatProjHead, ExpACCV2026
 
 EXP_FLOAT_VALUES = {"cls_feat", "train_subset_pct", "train_min_cls_pct"}
 
@@ -17,7 +16,7 @@ class Exp(ExpACCV2026):
         super().__init__()
         self.cls_feat_dim = 320  # hard encoding dangerous
         self.cls_feat = 0
-        self.cls_feat_loss = "sup_con_loss"  # ClsFeatLossFactory.get("sup_con_loss", temperature=self.cls_feat_temperature)
+        self.cls_feat_loss = "sup_con_loss"
         self.cls_feat_temperature = 0.07
         # self.cls_feat_mask = "conf"
         # self.cls_feat_mask_pct = 0.4
@@ -27,7 +26,7 @@ class Exp(ExpACCV2026):
         # self.cls_feat_proj_head_lr = 0.01
         # kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
         # self._cls_feat_loss = ClsFeatLoss(**kwargs)
-        # self._cls_feat_proj_head = ClsFeatProjHeadFactory.get(**kwargs)
+        # self._cls_feat_proj_head = ClsFeatProjHead(**kwargs) if kwargs["proj_head"] is not None else None
 
         self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
         self.exp_name = f"{self.exp_name}_baseline"
