@@ -1,21 +1,39 @@
 #!/bin/bash
-#SBATCH --job-name=yolox_train        # Kurzname des Jobs
-#SBATCH --output=logs/R_%j.out
-#SBATCH --partition=p2
+#SBATCH --job-name=yolox_train # Kurzname des Jobs
+#SBATCH --array=1%4
+#SBATCH --output=logs/R_%A_%a.out
+#SBATCH --partition=p2,p6             # p4
 #SBATCH --qos=gpuultimate
 #SBATCH --gres=gpu:1
-#SBATCH --nodes=1                # Anzahl Knoten
-#SBATCH --ntasks=1               # Gesamtzahl der Tasks über alle Knoten hinweg
-#SBATCH --cpus-per-task=1        # CPU Kerne pro Task (>1 für multi-threaded Tasks)
-#SBATCH --mem-per-cpu=64G        # RAM pro CPU Kern #20G #32G #64G
+#SBATCH --nodes=1                  # Anzahl Knoten
+#SBATCH --ntasks=1                 # Gesamtzahl der Tasks über alle Knoten hinweg
+#SBATCH --cpus-per-task=1          # CPU Kerne pro Task (>1 für multi-threaded Tasks)
+#SBATCH --mem-per-cpu=64G          # RAM pro CPU Kern #20G #32G #64G
 
 # ----- DIRS --------------------------------------------------------
 ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
 export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- GET ARGS ----------------------------------------------------
-EXP=${1:-custom/src/Images04.py}
-CKPT=${2:-checkpoints/yolox_x.pth}
+PARAMS_FILE="$ROOT_DIR/custom/slurm/slurm_params.txt"
+PARAMS=$(grep -v '^[[:space:]]*#' "$PARAMS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
+
+declare -A KV
+read -r -a ARR <<< "$PARAMS"
+for ((i=0; i<${#ARR[@]}; i+=2)); do
+    key="${ARR[$i]}"
+    value="${ARR[$i+1]}"
+    KV["$key"]="$value"
+done
+[[ "$PARAMS" != *"seed"* ]] && PARAMS="$PARAMS seed ${SLURM_ARRAY_JOB_ID}"
+
+OUT_DIR="${ROOT_DIR}/runs"
+RUN_NAME="${KV[exp_name]:-unnamed_run}"
+RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+EXP="${KV[exp]:-custom/src/Images04.py}"
+CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
+
+PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
 
 # ----- ENVIRONMENT SETUP -------------------------------------------
 module purge
@@ -43,7 +61,16 @@ python tools/train.py \
     --ckpt $ROOT_DIR/$CKPT \
     --cache \
     --logger wandb \
-        wandb-project runs \
+        wandb-project runs-yolox \
         wandb-entity team-noobtoss \
-        wandb-name "$(basename "$CKPT" .pth)_$(basename "$EXP" .py)_$(date +"%Y-%m-%d_%H-%M")" \
-        wandb-log_checkpoints False
+        wandb-name $RUN_NAME \
+        wandb-log_checkpoints False \
+    output_dir $OUT_DIR \
+    $PARAMS
+
+# ----- CLEANUP -----------------------------------------------------
+KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
+
+wandb sync --sync-all || true
+rm -rf "$TMPDIR"
+find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name %s' "${KEEP_FILES[@]}") -delete
