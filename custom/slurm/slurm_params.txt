@@ -1,23 +1,44 @@
-# Experiments BMVC2026 - SupConLoss
-exp_name 05BMVC2026_baseline exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 0
-exp_name 05BMVC2026_scl1     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 1
-exp_name 05BMVC2026_scl2     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 2
-exp_name 05BMVC2026_scl4     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 4
-exp_name 05BMVC2026_scl6     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 6
-exp_name 05BMVC2026_scl8     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 8
-exp_name 05BMVC2026_scl10    exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat 10
-# Experiments BMVC2026 - MultiSimLoss
-exp_name 05BMVC2026_msl2     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 2
-exp_name 05BMVC2026_msl4     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 4
-exp_name 05BMVC2026_msl6     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 6
-exp_name 05BMVC2026_msl8     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 8
-exp_name 05BMVC2026_msl10    exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 10
-exp_name 05BMVC2026_msl12    exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss multi_sim_loss cls_feat 12
-# Experiments BMVC2026 - CircleLoss
-exp_name 05BMVC2026_cl002    exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.02
-exp_name 05BMVC2026_cl005    exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.05
-exp_name 05BMVC2026_cl01     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.1
-exp_name 05BMVC2026_cl02     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.2
-exp_name 05BMVC2026_cl05     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 0.5
-exp_name 05BMVC2026_cl10     exp custom/src/05BMVC2026.py ckpt checkpoints/yolox_x.pth cls_feat_loss circle_loss cls_feat 1.0
-# Experiments End Current
+# Batch 1
+exp_name ACCV2026Plus_msl1         exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_loss multi_sim_loss
+exp_name ACCV2026Plus_msl1_head_s  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+exp_name ACCV2026Plus_msl1_head_m  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_loss multi_sim_loss cls_feat_proj_head m
+exp_name ACCV2026Plus_msl8         exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 8 cls_feat_loss multi_sim_loss
+exp_name ACCV2026Plus_msl8_head_s  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 8 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+exp_name ACCV2026Plus_msl8_head_m  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 8 cls_feat_loss multi_sim_loss cls_feat_proj_head m
+exp_name ACCV2026Plus_scl1         exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 1
+exp_name ACCV2026Plus_scl1_head_s  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 1  cls_feat_proj_head s
+# Batch 2
+exp_name ACCV2026Plus_scl1_head_m  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 1  cls_feat_proj_head m
+exp_name ACCV2026Plus_scl2         exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 2
+exp_name ACCV2026Plus_scl2_head_s  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 2  cls_feat_proj_head s
+exp_name ACCV2026Plus_scl2_head_m  exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 2  cls_feat_proj_head m
+exp_name ACCV2026Plus_scl12        exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 12
+exp_name ACCV2026Plus_scl12_head_s exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 12  cls_feat_proj_head s
+exp_name ACCV2026Plus_scl12_head_m exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 12  cls_feat_proj_head m
+exp_name ACCV2026_scl1         exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 1
+# Batch 3
+exp_name ACCV2026_scl1_head_s  exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_proj_head s
+exp_name ACCV2026_scl1_head_m  exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_proj_head m
+exp_name ACCV2026_scl2         exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 2
+exp_name ACCV2026_scl2_head_s  exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 2 cls_feat_proj_head s
+exp_name ACCV2026_scl2_head_m  exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 2 cls_feat_proj_head m
+exp_name ACCV2026_scl10        exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 10
+exp_name ACCV2026_scl10_head_s exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 10 cls_feat_proj_head s
+exp_name ACCV2026_scl10_head_m exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 10 cls_feat_proj_head m
+# Batch 4
+exp_name ACCV2026_msl1        exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_loss multi_sim_loss
+exp_name ACCV2026_msl1_head_s exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+exp_name ACCV2026_msl1_head_m exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 1 cls_feat_loss multi_sim_loss cls_feat_proj_head m
+exp_name ACCV2026_msl2        exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 2 cls_feat_loss multi_sim_loss
+exp_name ACCV2026_msl2_head_s exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 2 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+exp_name ACCV2026_msl2_head_m exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 2 cls_feat_loss multi_sim_loss cls_feat_proj_head m
+exp_name ACCV2026_msl4        exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 4 cls_feat_loss multi_sim_loss
+exp_name ACCV2026_msl4_head_s exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 4 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+# Batch 5
+exp_name ACCV2026_msl4_head_m exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 4 cls_feat_loss multi_sim_loss cls_feat_proj_head m
+exp_name ACCV2026_msl6        exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_loss multi_sim_loss
+exp_name ACCV2026_msl6_head_s exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+exp_name ACCV2026_msl6_head_m exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_loss multi_sim_loss cls_feat_proj_head m
+exp_name ACCV2026_msl8        exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 8 cls_feat_loss multi_sim_loss
+exp_name ACCV2026_msl8_head_s exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 8 cls_feat_loss multi_sim_loss cls_feat_proj_head s
+exp_name ACCV2026_msl8_head_m exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 8 cls_feat_loss multi_sim_loss cls_feat_proj_head m
