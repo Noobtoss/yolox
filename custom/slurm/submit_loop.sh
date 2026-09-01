@@ -21,7 +21,7 @@
 
 # ----- GET ARGS ----------------------------------------------------
 SLURM_SCRIPT=${1:-custom/slurm/slurm_train.sh}
-ARRAY=${2:-1-5%3}
+ARRAY=${2:-1-4%4}
 QOS=${3:-gpuultimate}
 LOOP_NUM=${4:-12}
 
