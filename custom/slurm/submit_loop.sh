@@ -2,16 +2,16 @@
 # submit_loop.sh
 #
 # Usage:
-#   ./submit_loop.sh [slurm_script] [array] [qos] [loop_num]
+#   ./submit_loop.sh [slurm_script] [array] [loop_num] [qos]
 #
 # Make executable:
 #   chmod +x submit_loop.sh
 #
 # Run:
-#   ./submit_loop.sh
+#   ./submit_loop.sh [slurm_script] [array] [loop_num] [qos]
 #
 # Run in background:
-#   nohup ./submit_loop.sh > submit_loop.out 2>&1 &
+#   nohup ./submit_loop.sh [slurm_script] [array] [loop_num] [qos] > submit_loop.out 2>&1 &
 #
 # Monitor:
 #   tail -f submit_loop.out
@@ -22,10 +22,10 @@
 # ----- GET ARGS ----------------------------------------------------
 SLURM_SCRIPT=${1:-custom/slurm/slurm_train.sh}
 ARRAY=${2:-1-4%4}
-QOS=${3:-gpuultimate}
-LOOP_NUM=${4:-12}
+LOOP_NUM=${3:-12}
+QOS=${4:-gpuultimate}
 
-echo "Script: $SLURM_SCRIPT | Array: $ARRAY | QOS: $QOS | Loops: $LOOP_NUM"
+echo "Script: $SLURM_SCRIPT | Array: $ARRAY | Loops: $LOOP_NUM | QOS: $QOS"
 
 # ----- GET SLURM LIMITS --------------------------------------------
 SUBMIT_LIMIT=$(sacctmgr show qos format=name,maxsubmitpu -p -n | awk -F'|' -v qos="$QOS" '$1 == qos {print $2}')
@@ -50,8 +50,6 @@ fi
 
 # ----- SUBMIT_LOOPS ------------------------------------------------
 for ((i=1; i<=LOOP_NUM; i++)); do
-    sleep 30
-
     while :; do
         CURRENT=$(squeue -u "$USER" -h -r | wc -l)
         FREE=$((SUBMIT_LIMIT - CURRENT))
@@ -63,7 +61,7 @@ for ((i=1; i<=LOOP_NUM; i++)); do
         fi
         sleep 600
     done
-
     out=$(sbatch --qos="$QOS" --array="$ARRAY" "$SLURM_SCRIPT")
     echo "[$(date)] $out" >> submitted_jobs.log
+    sleep 60
 done
