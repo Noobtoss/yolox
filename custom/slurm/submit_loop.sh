@@ -20,7 +20,6 @@
 #   pkill -f submit_loop.sh
 
 # ----- GET ARGS ----------------------------------------------------
-
 SLURM_SCRIPT=${1:-custom/slurm/slurm_train.sh}
 ARRAY=${2:-1-5%3}
 QOS=${3:-gpuultimate}
@@ -29,15 +28,11 @@ LOOP_NUM=${4:-12}
 echo "Script: $SLURM_SCRIPT | Array: $ARRAY | QOS: $QOS | Loops: $LOOP_NUM"
 
 # ----- GET SLURM LIMITS --------------------------------------------
-
 SUBMIT_LIMIT=$(sacctmgr show qos format=name,maxsubmitpu -p -n | awk -F'|' -v qos="$QOS" '$1 == qos {print $2}')
-
 RUNNING_LIMIT=$(sacctmgr show qos format=name,maxjobspu -p -n | awk -F'|' -v qos="$QOS" '$1 == qos {print $2}')
 
 # ----- GET SUBMIT SIZE ---------------------------------------------
-
 SUBMIT_SIZE=0
-
 IFS=',' read -ra PARTS <<< "${ARRAY%%%*}"
 
 for part in "${PARTS[@]}"; do
@@ -54,9 +49,7 @@ if (( SUBMIT_SIZE > SUBMIT_LIMIT )); then
 fi
 
 # ----- SUBMIT_LOOPS ------------------------------------------------
-
 for ((i=1; i<=LOOP_NUM; i++)); do
-
     sleep 30
 
     while :; do
@@ -73,5 +66,4 @@ for ((i=1; i<=LOOP_NUM; i++)); do
 
     out=$(sbatch --qos="$QOS" --array="$ARRAY" "$SLURM_SCRIPT")
     echo "[$(date)] $out" >> submitted_jobs.log
-
 done
