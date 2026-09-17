@@ -21,10 +21,6 @@ class Exp(_Exp):
         self.cls_feat_dim           = 320  # hard encoding dangerous
         self.cls_feat_loss          = None   # SupervisedContrastiveLoss()
         self.cls_feat_temperature   = 0.07
-        self.cls_feat_mask          = None
-        self.cls_feat_mask_pct      = 0.4
-        self.cls_feat_min_per_class = 4
-        self.cls_feat_weight        = None
         self.cls_feat_proj_head     = None
         self.cls_feat_proj_head_lr  = None
         self.cls_feat_scheduler     = None

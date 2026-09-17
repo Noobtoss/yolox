@@ -18,10 +18,6 @@ class Exp(ExpACCV2026):
         self.cls_feat = 0
         self.cls_feat_loss = "sup_con_loss"
         self.cls_feat_temperature = 0.07
-        # self.cls_feat_mask = "conf"
-        # self.cls_feat_mask_pct = 0.4
-        # self.cls_feat_min_per_class = 4
-        # self.cls_feat_weight = "conf"
         # self.cls_feat_proj_head = "s"
         # self.cls_feat_proj_head_lr = 0.01
         # kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
