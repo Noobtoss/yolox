@@ -63,6 +63,10 @@ class ClsFeatLoss(nn.Module):
         super().__init__()
         self.loss = FeatLossFactory.get(loss, **kwargs)
 
-    def forward(self, cls_feats: torch.Tensor, target_cls: torch.Tensor) -> torch.Tensor:
+    def forward(self,
+                cls_feats: torch.Tensor, target_cls: torch.Tensor = None, target_scores: torch.Tensor = None
+                ) -> torch.Tensor:
+        if target_cls is None:
+            target_cls = target_scores.max(-1).indices
         loss_per_element = self.loss(cls_feats, target_cls).squeeze(-1)
         return loss_per_element.mean()
