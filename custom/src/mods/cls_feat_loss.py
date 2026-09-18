@@ -1,14 +1,14 @@
 import inspect
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from pytorch_metric_learning import losses, reducers
 
 
 class UnpackReducer(reducers.BaseReducer):
     def element_reduction(self, losses, loss_indices, embeddings, labels):
-        sorted_indices = torch.argsort(loss_indices)
-        return losses[sorted_indices]
+        if loss_indices.dtype == torch.bool:
+            return losses[loss_indices]
+        return losses
 
 
 class NormalizeEmbeddingsWrapper(nn.Module):
@@ -17,7 +17,9 @@ class NormalizeEmbeddingsWrapper(nn.Module):
         self.loss = loss
 
     def forward(self, embeddings, *args, **kwargs):
-        return self.loss(F.normalize(embeddings.float(), dim=1), *args, **kwargs)
+        embeddings = embeddings.float()
+        norm = embeddings.norm(p=2, dim=1, keepdim=True).clamp_min(1e-4)
+        return self.loss(embeddings / norm, *args, **kwargs)
 
 
 class FeatLossFactory:
@@ -70,3 +72,4 @@ class ClsFeatLoss(nn.Module):
             target_cls = target_scores.max(-1).indices
         loss_per_element = self.loss(cls_feats, target_cls).squeeze(-1)
         return loss_per_element.mean()
+
