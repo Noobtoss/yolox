@@ -14,8 +14,8 @@ class ClassLossWeighted(nn.Module):
         self.register_buffer("class_weights", class_weights)
         self.register_buffer("class_weights_matrix", class_weights_matrix)
 
-    def forward(self, pred_scores: torch.Tensor, target_scores: torch.Tensor) -> torch.Tensor:
-        loss = self.loss(pred_scores, target_scores)
+    def forward(self, pred_scores: torch.Tensor, target_scores: torch.Tensor, *args, **kwargs) -> torch.Tensor:
+        loss = self.loss(pred_scores, target_scores, *args, **kwargs)
         if self.class_weights is not None:
             loss = loss * self.class_weights
         if self.class_weights_matrix is not None:
