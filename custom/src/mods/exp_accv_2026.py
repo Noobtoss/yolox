@@ -5,7 +5,8 @@ import torch.nn as nn
 from .exp import Exp as _Exp
 from .cls_feat_loss import ClsFeatLoss
 from .cls_feat_proj_head import ClsFeatProjHead
-
+from .class_losses_weighted import ClassLossWeighted
+from .class_weights import class_weights
 
 # THS, Copied from yolox.exp.yolox_base.py
 
@@ -121,6 +122,8 @@ class Exp(_Exp):
             in_channels = [256, 512, 1024]
             backbone = YOLOPAFPN(self.depth, self.width, in_channels=in_channels, act=self.act)
 
+            weights = getattr(self, "_class_weights", None) or class_weights[getattr(self, "class_weights", None)]
+            class_loss = ClassLossWeighted(**weights)
             kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
             cls_feat_loss = getattr(self, "_cls_feat_loss", None) or ClsFeatLoss(**kwargs)
             cls_feat_proj_head = (
@@ -130,6 +133,7 @@ class Exp(_Exp):
             )
 
             head = YOLOXHead(self.num_classes, self.width, in_channels=in_channels, act=self.act,
+                             class_loss=class_loss,
                              cls_feat=float(self.cls_feat) if self.cls_feat is not None else None,
                              cls_feat_loss=cls_feat_loss,
                              cls_feat_proj_head=cls_feat_proj_head)

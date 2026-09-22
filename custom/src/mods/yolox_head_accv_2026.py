@@ -1,6 +1,7 @@
 from loguru import logger
 import warnings
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 from yolox.utils import bboxes_iou, cxcywh2xyxy, meshgrid, visualize_assign
 from yolox.models.yolo_head import YOLOXHead as _YOLOXHead
@@ -18,6 +19,7 @@ class YOLOXHead(_YOLOXHead):
         in_channels=[256, 512, 1024],
         act="silu",
         depthwise=False,
+        class_loss=None,
         cls_feat=None,
         cls_feat_loss=None,
         cls_feat_proj_head=None
@@ -31,6 +33,9 @@ class YOLOXHead(_YOLOXHead):
             act,
             depthwise
         )
+        if class_loss is None:
+            class_loss = nn.BCEWithLogitsLoss(reduction="none")
+        self.class_loss = class_loss
         self.cls_feat = cls_feat or 0
         self.cls_feat_loss = cls_feat_loss
         self.cls_feat_proj_head = cls_feat_proj_head
@@ -279,11 +284,13 @@ class YOLOXHead(_YOLOXHead):
         loss_obj = (
             self.bcewithlog_loss(obj_preds.view(-1, 1), obj_targets)
         ).sum() / num_fg
+        # >>> MOD
         loss_cls = (
-            self.bcewithlog_loss(
+            self.class_loss(
                 cls_preds.view(-1, self.num_classes)[fg_masks], cls_targets
             )
         ).sum() / num_fg
+        # <<< MOD
         if self.use_l1:
             loss_l1 = (
                 self.l1_loss(origin_preds.view(-1, 4)[fg_masks], l1_targets)
