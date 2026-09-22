@@ -72,4 +72,3 @@ class ClsFeatLoss(nn.Module):
             target_cls = target_scores.max(-1).indices
         loss_per_element = self.loss(cls_feats, target_cls).squeeze(-1)
         return loss_per_element.mean()
-
