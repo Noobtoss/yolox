@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=yolox_train # Kurzname des Jobs
-#SBATCH --array=1-10%4
+#SBATCH --array=1-3%4
 #SBATCH --output=logs/R_%A_%a.out
-#SBATCH --partition=p2,p6             # p4
+#SBATCH --partition=p6             # p4
 #SBATCH --qos=gpuultimate
 #SBATCH --gres=gpu:1
 #SBATCH --nodes=1                  # Anzahl Knoten
@@ -71,6 +71,11 @@ python tools/train.py \
 # ----- CLEANUP -----------------------------------------------------
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
 
-wandb sync --sync-all || true
+for i in 1 2 3 4 5; do
+    wandb sync --sync-all && break
+    echo "sync attempt $i failed, retrying..."
+    sleep 20
+done
+
 rm -rf "$TMPDIR"
 find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name %s' "${KEEP_FILES[@]}") -delete
