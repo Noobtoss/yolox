@@ -19,7 +19,7 @@ class ClassLossWeighted(nn.Module):
         if self.class_weights is not None:
             loss = loss * self.class_weights
         if self.class_weights_matrix is not None:
-            gt_cls = target_scores.argmax(dim=-1)
-            weight_per_sample = self.class_weights_matrix[gt_cls]
+            labels = target_scores.argmax(dim=-1)
+            weight_per_sample = self.class_weights_matrix[labels]
             loss = loss * weight_per_sample
         return loss
