@@ -14,6 +14,7 @@ def check_exp_value(exp):
 class Exp(ExpACCV2026):
     def __init__(self):
         super().__init__()
+        self.class_weights = None
         self.cls_feat_dim = 320  # hard encoding dangerous
         self.cls_feat = 0
         self.cls_feat_loss = "sup_con_loss"
