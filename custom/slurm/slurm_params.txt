@@ -1,4 +1,13 @@
 # Experiments SAC2027
+exp_name SAC2027_baseline           exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name SAC2027_scl6               exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 6
+exp_name SAC2027_scl6_head_s        exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_proj_head s
+exp_name SAC2027_scl6_head_m        exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_proj_head m
+exp_name SAC2027Plus_baseline       exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name SAC2027Plus_scl6           exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 6
+exp_name SAC2027Plus_scl6_head_s    exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_proj_head s
+exp_name SAC2027Plus_scl6_head_m    exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 6 cls_feat_proj_head m
+# Experiments SAC2027 class sim
 exp_name 05SAC2027_baseline         exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 0
 exp_name 05SAC2027_class_sim        exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim
 exp_name 05SAC2027_class_sim_matrix exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim_matrix
