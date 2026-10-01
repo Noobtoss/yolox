@@ -21,5 +21,10 @@ class ClassLossWeighted(nn.Module):
         if self.class_weights_matrix is not None:
             labels = target_scores.argmax(dim=-1)
             weight_per_sample = self.class_weights_matrix[labels]
+            weight_per_sample = torch.where(
+                target_scores.any(dim=-1, keepdim=True),
+                weight_per_sample,
+                torch.ones_like(weight_per_sample),
+            )
             loss = loss * weight_per_sample
         return loss
