@@ -26,6 +26,8 @@ class Exp(ExpACCV2026):
 
         # Define yourself dataset path
         self.data_dir = "datasets/06Aufsatz"
+        # self.data_dir = "datasets/06AufsatzCopyPaste"
+        # self.data_dir = "datasets/06AufsatzCopyPasteExtended"
         self.train_ann = "annotation_train.json"
         self.val_ann = "annotation_test.json"
 
