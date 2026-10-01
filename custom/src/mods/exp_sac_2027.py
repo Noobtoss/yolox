@@ -105,7 +105,7 @@ class Exp(_Exp):
     def get_model(self):
         from yolox.models import YOLOPAFPN  # , YOLOXHead # THS
         from .yolox import YOLOX
-        from .yolox_head_accv_2026 import YOLOXHead
+        from .yolox_head_sac_2027 import YOLOXHead
 
         if self.cls_feat_loss is None:
             raise NotImplementedError("cls_feat_loss must be set before calling get_model().")
