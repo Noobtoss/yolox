@@ -17,8 +17,10 @@ class ClassLossWeighted(nn.Module):
     def forward(self, pred_scores: torch.Tensor, target_scores: torch.Tensor, *args, **kwargs) -> torch.Tensor:
         loss = self.loss(pred_scores, target_scores, *args, **kwargs)
         if self.class_weights is not None:
+            self.class_weights = self.class_weights.to(device=pred_scores.device)
             loss = loss * self.class_weights
         if self.class_weights_matrix is not None:
+            self.class_weights_matrix = self.class_weights_matrix.to(device=pred_scores.device)
             labels = target_scores.argmax(dim=-1)
             weight_per_sample = self.class_weights_matrix[labels]
             weight_per_sample = torch.where(
