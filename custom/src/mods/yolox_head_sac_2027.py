@@ -272,7 +272,7 @@ class YOLOXHead(_YOLOXHead):
         # >>> MOD
         # Exclude zero-IoU matches: their class targets are all zero.
         nonzero_iou_mask = cls_targets.any(dim=-1)
-        cls_feats = cls_feats.view(-1, self.cls_feat_dim)[fg_masks][iou_mask]
+        cls_feats = cls_feats.view(-1, self.cls_feat_dim)[fg_masks]
         if self.cls_feat_proj_head is not None:
             cls_feats = self.cls_feat_proj_head(cls_feats)
         # <<< MOD
