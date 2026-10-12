@@ -1,5 +1,5 @@
-# Experiments ClassSim
-exp_name 05SAC2027_baseline         exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 0
-exp_name 05SAC2027_class_sim        exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim
-exp_name 05SAC2027_class_sim_matrix exp custom/src/05ACCV2026Plus.py ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim_matrix
+# Experiments class_sim
+exp_name 05SAC2027_baseline         exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0
+exp_name 05SAC2027_class_sim        exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim
+exp_name 05SAC2027_class_sim_matrix exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim_matrix
 # Experiments End Current
