@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=yolox_train_arr # Kurzname des Jobs
+#SBATCH --job-name=yolox_arr # Kurzname des Jobs
 #SBATCH --array=1
 #SBATCH --output=logs/R_%A_%a.out
 #SBATCH --partition=p2,p3,p4,p5,p6 # p4
