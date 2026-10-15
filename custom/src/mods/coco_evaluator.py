@@ -18,7 +18,7 @@ class COCOEvaluator(_COCOEvaluator):
     def evaluate_prediction(self, data_dict, statistics):
         if not is_main_process():
             # >>> MOD
-            return {"metrics/mAP50-95": 0, "metrics/mAP50": 0}, None
+            return {"eval/mAP50-95": 0, "eval/mAP50": 0}, None
             # <<< MOD
         logger.info("Evaluate in main process...")
 
@@ -98,13 +98,13 @@ class COCOEvaluator(_COCOEvaluator):
                 info += "per class AR:\n" + AR_table + "\n"
             # >>> MOD
             metrics = {
-                "metrics/mAP50-95": cocoEval.stats[0],
-                "metrics/mAP50": cocoEval.stats[1],
-                "metrics/mAP50-95_agnostic": cocoEval_agnostic.stats[0],
-                "metrics/mAP50-95_0p": cocoEval_0p.stats[0],
-                "metrics/mAP50-95_22p": cocoEval_22p.stats[0],
+                "eval/mAP50-95": cocoEval.stats[0],
+                "eval/mAP50": cocoEval.stats[1],
+                "eval/mAP50-95_agnostic": cocoEval_agnostic.stats[0],
+                "eval/mAP50-95_0p": cocoEval_0p.stats[0],
+                "eval/mAP50-95_22p": cocoEval_22p.stats[0],
             }
             return metrics, info
         else:
-            return {"metrics/mAP50-95": 0, "metrics/mAP50": 0}, info
+            return {"eval/mAP50-95": 0, "eval/mAP50": 0}, info
         # <<< MOD

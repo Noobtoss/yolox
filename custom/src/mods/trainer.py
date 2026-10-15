@@ -84,8 +84,8 @@ class Trainer(_Trainer):
             (metrics, summary), predictions = self.exp.eval(
                 evalmodel, self.evaluator, self.is_distributed, return_outputs=True
             )
-        ap50 = metrics["metrics/mAP50"]
-        ap50_95 = metrics["metrics/mAP50-95"]
+        ap50 = metrics["eval/mAP50"]
+        ap50_95 = metrics["eval/mAP50-95"]
         # metrics = {f"val/{k}": v for k, v in metrics.items()}
 
         update_best_ckpt = ap50_95 > self.best_ap
