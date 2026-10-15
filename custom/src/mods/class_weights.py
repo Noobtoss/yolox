@@ -4,8 +4,11 @@ CLASS_SIM = torch.tensor(
 [0.68, 0.68, 0.87, 0.68, 0.83, 0.82, 0.70, 0.76, 0.76, 0.90, 0.70, 0.91, 0.77, 0.77, 0.89, 0.89, 0.79, -1.00, -1.00, 0.78, 0.83, 0.91, 0.87, 0.82, 0.93, 0.77, -1.00, 0.90, 0.85, 0.86, 0.94, -1.00, -1.00, 0.83, 0.94, -1.00, 0.83],
 dtype=torch.float32
 ).view(1, 1, -1)
-CLASS_SIM = CLASS_SIM / CLASS_SIM[CLASS_SIM >= 0].mean()
-CLASS_SIM[CLASS_SIM <= 0] = 1  # -1.0 = classes only in dataset.categories -> weight=1 (trains as negative, weight=0 wouldn't)
+
+valid = CLASS_SIM > 0  # -1.0 = classes only in dataset.categories -> weight=1 (trains as negative, weight=0 wouldn't)
+CLASS_SIM = torch.where(valid, 1 - CLASS_SIM, torch.ones_like(CLASS_SIM))
+CLASS_SIM[valid] /= CLASS_SIM[valid].mean()
+CLASS_SIM[~valid] = 1
 
 CLASS_SIM_MATRIX = torch.tensor(
 [
@@ -49,10 +52,18 @@ CLASS_SIM_MATRIX = torch.tensor(
 ],
 dtype=torch.float32
 )
-CLASS_SIM_MATRIX = CLASS_SIM_MATRIX / CLASS_SIM_MATRIX[CLASS_SIM_MATRIX >= 0].mean()
-CLASS_SIM_MATRIX[CLASS_SIM_MATRIX <= 0] = 1  # -1.0 = classes only in dataset.categories -> weight=1 (trains as negative, weight=0 wouldn't)
+
+valid = CLASS_SIM_MATRIX > 0  # -1.0 = classes only in dataset.categories -> weight=1 (trains as negative, weight=0 wouldn't)
+CLASS_SIM_MATRIX.diagonal()[valid.diagonal()] = 1 - CLASS_SIM_MATRIX.diagonal()[valid.diagonal()]  # Invert valid intra-class similarities before normalizing the matrix.
+CLASS_SIM_MATRIX /= CLASS_SIM_MATRIX.masked_fill(~valid, torch.nan).nanmean(dim=1, keepdim=True)
+CLASS_SIM_MATRIX[~valid] = 1
 
 class_weights = {
+    'None':
+        {
+            "class_weights": None,
+            "class_weights_matrix": None,
+        },
     None:
         {
             "class_weights": None,
