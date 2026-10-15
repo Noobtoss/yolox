@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=yolox # Kurzname des Jobs
 #SBATCH --array=1-6%4
-#SBATCH --output=logs/R_%A_%a.out
+#SBATCH --output=logs/%A_%a.out
 #SBATCH --partition=p4,p6             # p4
 #SBATCH --qos=gpuultimate
 #SBATCH --gres=gpu:1
