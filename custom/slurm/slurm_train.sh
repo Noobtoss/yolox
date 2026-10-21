@@ -11,11 +11,11 @@
 #SBATCH --mem-per-cpu=64G          # RAM pro CPU Kern #20G #32G #64G
 
 # ----- DIRS --------------------------------------------------------
-ROOT_DIR=/nfs/scratch/staff/schmittth/code_nexus/yolox
+ROOT=/nfs/scratch/staff/schmittth/code_nexus/yolox
 export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- GET ARGS ----------------------------------------------------
-PARAMS_FILE="$ROOT_DIR/custom/slurm/slurm_params.txt"
+PARAMS_FILE="$ROOT/custom/slurm/slurm_params.txt"
 PARAMS=$(grep -v '^[[:space:]]*#' "$PARAMS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
 
 declare -A KV
@@ -27,7 +27,7 @@ for ((i=0; i<${#ARR[@]}; i+=2)); do
 done
 [[ "$PARAMS" != *"seed"* ]] && PARAMS="$PARAMS seed ${SLURM_ARRAY_JOB_ID}"
 
-OUT_DIR="${ROOT_DIR}/runs"
+OUT_DIR="${ROOT}/runs"
 RUN_NAME="${KV[exp_name]:-unnamed_run}"
 RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 EXP="${KV[exp]:-custom/src/Images04.py}"
@@ -42,7 +42,7 @@ module load python/anaconda3
 eval "$(conda shell.bash hook)"
 conda activate conda-yolox
 
-export PYTHONPATH="$ROOT_DIR/custom/src:$PYTHONPATH"
+export PYTHONPATH="$ROOT/custom/src:$PYTHONPATH"
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
@@ -53,12 +53,12 @@ export WANDB_CONFIG_DIR=$TMPDIR
 
 # ----- TRAINING ----------------------------------------------------
 python tools/train.py \
-    --exp_file $ROOT_DIR/$EXP \
+    --exp_file $ROOT/$EXP \
     --devices 1 \
     --batch-size 8 \
     --fp16 \
     --occup \
-    --ckpt $ROOT_DIR/$CKPT \
+    --ckpt $ROOT/$CKPT \
     --cache \
     --logger wandb \
         wandb-project runs-yolox \
