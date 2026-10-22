@@ -7,9 +7,6 @@ from yolox.utils import bboxes_iou, cxcywh2xyxy, meshgrid, visualize_assign
 from yolox.models.yolo_head import YOLOXHead as _YOLOXHead
 
 
-# THS, Copied from yolox.models.yolo_head
-
-
 class YOLOXHead(_YOLOXHead):
     def __init__(
         self,

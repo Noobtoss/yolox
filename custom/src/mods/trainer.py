@@ -7,9 +7,6 @@ from yolox.utils import adjust_status, is_parallel, synchronize
 from yolox.core import Trainer as _Trainer
 
 
-# THS, Copied from yolox.core.trainer
-
-
 class Trainer(_Trainer):
     def __init__(self, exp, args):
         warnings.warn("[Modded] Trainer")

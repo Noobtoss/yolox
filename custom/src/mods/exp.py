@@ -3,11 +3,10 @@ from pathlib import Path
 from yolox.exp import Exp as _Exp
 
 
-# THS, Copied from yolox.exp.yolox_base.py
-
-
 def tag_exp(exp, cfg_list):
-    exp.dataset_name = Path(getattr(exp, "data_dir")).stem
+    train_folder = Path(exp.train_ann).parent.name or Path(exp.data_dir).stem
+    val_folder = Path(exp.val_ann).parent.name or Path(exp.data_dir).stem
+    exp.dataset_name = train_folder if train_folder == val_folder else f"{train_folder}_{val_folder}"
     for k, v in zip(cfg_list[0::2], cfg_list[1::2]):
         if k == "ckpt":
             exp.model_name = Path(v).stem
@@ -146,6 +145,13 @@ class Exp(_Exp):
         # nms threshold
         self.nmsthre = 0.65
 
+    def merge(self, cfg_list):
+        annotation_aliases = {"coco_train": "train_ann", "coco_test": "val_ann", "coco_val": "val_ann"}
+        cfg_list = list(cfg_list)
+        cfg_list[0::2] = [annotation_aliases.get(key, key) for key in cfg_list[0::2]]
+        super().merge(cfg_list)
+        tag_exp(self, cfg_list)
+
     def get_dataset(self, cache: bool = False, cache_type: str = "ram"):
         """
         Get dataset according to cache and cache_type parameters.
@@ -156,9 +162,10 @@ class Exp(_Exp):
                 "disk": Caching imgs to disk for fast training.
         """
         from yolox.data import COCODataset, TrainTransform
+        from .coco_dataset import COCODataset
 
         return COCODataset(
-            name="Images",  # self.train_ann.split("annotation_")[-1].removesuffix(".json"),
+            name=self.train_ann.split("annotation_")[-1].removesuffix(".json"),
             data_dir=self.data_dir,
             json_file=self.train_ann,
             img_size=self.input_size,
@@ -173,23 +180,21 @@ class Exp(_Exp):
 
     def get_eval_dataset(self, **kwargs):
         from yolox.data import COCODataset, ValTransform
+        from .coco_dataset import COCODataset
         testdev = kwargs.get("testdev", False)
         legacy = kwargs.get("legacy", False)
+        ann_file = self.val_ann if not testdev else self.test_ann
 
         def read_useful_info(coco):
             coco.dataset["info"] = None
             return coco
 
         coco_dataset = COCODataset(
-            name="Images",
+            name=ann_file.split("annotation_")[-1].removesuffix(".json"),
             data_dir=self.data_dir,
-            json_file=self.val_ann if not testdev else self.test_ann,
+            json_file=ann_file,
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),
         )
         read_useful_info(coco_dataset.coco)
         return coco_dataset
-
-    def merge(self, cfg_list):
-        super().merge(cfg_list)
-        tag_exp(self, cfg_list)

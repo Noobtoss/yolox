@@ -8,16 +8,20 @@ from .cls_feat_proj_head import ClsFeatProjHead
 from .class_losses_weighted import ClassLossWeighted
 from .class_weights import class_weights
 
-# THS, Copied from yolox.exp.yolox_base.py
+
+EXP_FLOAT_VALUES = {"cls_feat"}
+
+
+def check_exp_value(exp):
+    for value in EXP_FLOAT_VALUES:
+        if getattr(exp, value, None) is not None:
+            setattr(exp, value, float(getattr(exp, value)))
 
 
 class Exp(_Exp):
     def __init__(self):
         super().__init__()
         self.save_history_ckpt      = False  # True
-        self.train_subset_pct       = None
-        self.train_min_cls_pct      = None
-        self.seed                   = 2024
         self.cls_feat               = None   # 1
         self.cls_feat_dim           = 320    # hard encoding dangerous
         self.cls_feat_loss          = None   # SupervisedContrastiveLoss()
@@ -26,34 +30,9 @@ class Exp(_Exp):
         self.cls_feat_proj_head_lr  = None
         self.cls_feat_scheduler     = None
 
-    def get_dataset(self, cache: bool = False, cache_type: str = "ram"):
-        """
-        Get dataset according to cache and cache_type parameters.
-        Args:
-            cache (bool): Whether to cache imgs to ram or disk.
-            cache_type (str, optional): Defaults to "ram".
-                "ram" : Caching imgs to ram for fast training.
-                "disk": Caching imgs to disk for fast training.
-        """
-        from yolox.data import TrainTransform
-        from .coco_dataset import COCODataset
-
-        return COCODataset(
-            name="Images",  # self.train_ann.split("annotation_")[-1].removesuffix(".json"),
-            data_dir=self.data_dir,
-            json_file=self.train_ann,
-            img_size=self.input_size,
-            preproc=TrainTransform(
-                max_labels=50,
-                flip_prob=self.flip_prob,
-                hsv_prob=self.hsv_prob
-            ),
-            cache=cache,
-            cache_type=cache_type,
-            train_subset_pct=self.train_subset_pct,
-            train_min_cls_pct=self.train_min_cls_pct,
-            seed=int(self.seed) if self.seed is not None else None,
-        )
+    def merge(self, cfg_list):
+        super().merge(cfg_list)
+        check_exp_value(self)
 
     def get_evaluator(self, batch_size, is_distributed, testdev=False, legacy=False):
         from .coco_evaluator import COCOEvaluator
@@ -103,9 +82,9 @@ class Exp(_Exp):
         return trainer
 
     def get_model(self):
-        from yolox.models import YOLOPAFPN  # , YOLOXHead # THS
+        from yolox.models import YOLOPAFPN
         from .yolox import YOLOX
-        from .yolox_head_sac_2027 import YOLOXHead
+        from .yolox_head_phd import YOLOXHead
 
         if self.cls_feat_loss is None:
             raise NotImplementedError("cls_feat_loss must be set before calling get_model().")

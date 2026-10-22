@@ -2,14 +2,6 @@ import os
 
 from mods import ExpACCV2026
 
-EXP_FLOAT_VALUES = {"cls_feat", "train_subset_pct", "train_min_cls_pct"}
-
-
-def check_exp_value(exp):
-    for value in EXP_FLOAT_VALUES:
-        if getattr(exp, value, None) is not None:
-            setattr(exp, value, float(getattr(exp, value)))
-
 
 class Exp(ExpACCV2026):
     def __init__(self):
@@ -30,9 +22,6 @@ class Exp(ExpACCV2026):
         # self.data_dir = "datasets/06AufsatzCopyPasteExtended"
         self.train_ann = "annotation_train.json"
         self.val_ann = "annotation_test.json"
-
-        self.train_subset_pct = None
-        self.train_min_cls_pct = None
 
         # --------------  training config --------------------- #
 
@@ -102,7 +91,3 @@ class Exp(ExpACCV2026):
             self.width = 1.25
 
         # self.ckpt = f"checkpoints/{scale}.pth"
-
-    def merge(self, *args, **kwargs):
-        super().merge(*args, **kwargs)
-        check_exp_value(self)

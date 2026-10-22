@@ -102,7 +102,7 @@ class COCOEvaluator(_COCOEvaluator):
                 "eval/mAP50": cocoEval.stats[1],
                 "eval/mAP50-95_agnostic": cocoEval_agnostic.stats[0],
                 "eval/mAP50-95_0p": cocoEval_0p.stats[0],
-                "eval/mAP50-95_22p": cocoEval_22p.stats[0],
+                # "eval/mAP50-95_22p": cocoEval_22p.stats[0],  # currently removed from metrics
             }
             return metrics, info
         else:
