@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=yolox # Kurzname des Jobs
-#SBATCH --array=1-6%4
+#SBATCH --array=1-5%3
 #SBATCH --output=logs/%A_%a.out
 #SBATCH --partition=p4,p6             # p4
 #SBATCH --qos=gpuultimate

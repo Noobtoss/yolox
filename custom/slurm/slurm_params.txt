@@ -1,8 +1,7 @@
-# Experiments class_sim
-exp_name 05SAC2027_baseline             exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 0
-exp_name 05SAC2027_class_sim            exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim
-exp_name 05SAC2027_class_sim_matrix     exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026     ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim_matrix
-exp_name 05SAC2027Plus_baseline         exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0
-exp_name 05SAC2027Plus_class_sim        exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim
-exp_name 05SAC2027Plus_class_sim_matrix exp custom/src/05ACCV2026.py data_dir datasets/05ACCV2026Plus ckpt checkpoints/yolox_x.pth cls_feat 0 class_weights class_sim_matrix
+# Experiments
+exp_name 05SAC2027                  exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 0 data_dir datasets/05ACCV2026
+exp_name 05SAC2027Plus              exp custom/src/05ACCV2026.py ckpt checkpoints/yolox_x.pth cls_feat 0 data_dir datasets/05ACCV2026Plus
+exp_name 06Aufsatz                  exp custom/src/06PhD.py ckpt checkpoints/yolox_x.pth cls_feat 0 data_dir ../../data_nexus coco_train phd_experiments/06Aufsatz/annotation_train.json                  coco_test phd_experiments/06Aufsatz/annotation_test.json
+exp_name 06AufsatzCopyPaste         exp custom/src/06PhD.py ckpt checkpoints/yolox_x.pth cls_feat 0 data_dir ../../data_nexus coco_train phd_experiments/06AufsatzCopyPaste/annotation_train.json         coco_test phd_experiments/06AufsatzCopyPaste/annotation_test.json
+exp_name 06AufsatzCopyPasteExtended exp custom/src/06PhD.py ckpt checkpoints/yolox_x.pth cls_feat 0 data_dir ../../data_nexus coco_train phd_experiments/06AufsatzCopyPasteExtended/annotation_train.json coco_test phd_experiments/06AufsatzCopyPasteExtended/annotation_test.json
 # Experiments End Current
