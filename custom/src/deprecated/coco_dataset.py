@@ -9,9 +9,6 @@ from yolox.data.datasets.datasets_wrapper import CacheDataset
 from yolox.data.datasets.coco import COCODataset as _COCODataset
 
 
-# THS, Copied from yolox.data.dataset.coco
-
-
 def coco_subsample(coco: COCO, subset_pct: float, min_cls_pct: float = None, seed: int = 2024) -> COCO:
     min_cls_pct = min_cls_pct or 0.5 * subset_pct
     random.seed(seed)
