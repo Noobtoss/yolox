@@ -14,7 +14,7 @@
 #   nohup ./submit_loop.sh [slurm_script] [array] [loop_num] [qos] > submit_loop.out 2>&1 &
 #
 # Example call:
-#   nohup ./custom/slurm/submit_loop.sh custom/slurm/slurm_train.sh '1-4%4' 12 > submit_loop.out 2>&1 &
+#   nohup ./custom/slurm/submit_loop.sh custom/slurm/slurm_train.sh '1-3%3' 12 > submit_loop.out 2>&1 &
 #
 # Monitor:
 #   tail -f submit_loop.out
@@ -24,7 +24,7 @@
 
 # ----- GET ARGS ----------------------------------------------------
 SLURM_SCRIPT=${1:-custom/slurm/slurm_train.sh}
-ARRAY=${2:-1-4%4}
+ARRAY=${2:-1-3%3}
 LOOP_NUM=${3:-12}
 QOS=${4:-gpuultimate}
 

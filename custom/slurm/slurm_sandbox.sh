@@ -14,9 +14,27 @@
 ROOT=/nfs/scratch/staff/schmittth/code_nexus/yolox
 export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
+# ----- ENVIRONMENT SETUP -------------------------------------------
+module purge
+module load python/anaconda3
+
+eval "$(conda shell.bash hook)"
+conda activate conda-yolox
+
+export PYTHONPATH="$ROOT/custom/src:$PYTHONPATH"
+
 # ----- GET ARGS ----------------------------------------------------
-ARGS_FILE="$ROOT/custom/slurm/slurm_args.txt"
-ARGS=$(grep -v '^[[:space:]]*#' "$ARGS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
+EXP_MAP_FILE="$ROOT/custom/slurm/experiments_map.txt"
+EXP_ARGS_FILE="$ROOT/custom/slurm/experiments.json"
+
+EXP_NAME=$(grep -v '^[[:space:]]*#' "$EXP_MAP_FILE" | awk -v id="$SLURM_ARRAY_TASK_ID" '$1 == id {print $2; exit}')
+
+ARGS=$(python -c '
+import json, sys
+exp = json.load(open(sys.argv[1]))[sys.argv[2]]
+print(" ".join(f"{k} {v}" for k, v in exp.items()))
+' "$EXP_ARGS_FILE" "$EXP_NAME") || { echo "ERROR: exp_name '$EXP_NAME' not found in $EXP_ARGS_FILE" >&2; exit 1; }
+ARGS="exp_name $EXP_NAME $ARGS"
 
 declare -A KV
 read -r -a ARR <<< "$ARGS"
@@ -27,22 +45,13 @@ for ((i=0; i<${#ARR[@]}; i+=2)); do
 done
 [[ "$ARGS" != *"seed"* ]] && ARGS="$ARGS seed ${SLURM_ARRAY_JOB_ID}"
 
-OUT_DIR="${ROOT}/runs"
 RUN_NAME="${KV[exp_name]:-unnamed_run}"
 RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+OUT_DIR="${ROOT}/runs/${RUN_NAME}"
 EXP="${KV[exp]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
 
 ARGS=$(echo "$ARGS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
-
-# ----- ENVIRONMENT SETUP -------------------------------------------
-module purge
-module load python/anaconda3
-
-eval "$(conda shell.bash hook)"
-conda activate conda-yolox
-
-export PYTHONPATH="$ROOT/custom/src:$PYTHONPATH"
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
@@ -65,12 +74,13 @@ python tools/train.py \
         wandb-entity team-noobtoss \
         wandb-name $RUN_NAME \
         wandb-log_checkpoints False \
-    output_dir $OUT_DIR \
+    output_dir "${OUT_DIR%/$RUN_NAME}" \
     $ARGS
 
 # ----- CLEANUP -----------------------------------------------------
-KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
+[[ -f "$OUT_DIR/last_epoch_ckpt.pth" ]] && mv -f "$OUT_DIR/last_epoch_ckpt.pth" "$OUT_DIR/${RUN_NAME}.pth"
+KEEP_FILES=("train_log.txt" "${RUN_NAME}.pth")
 
 wandb sync --sync-all || true
 rm -rf "$TMPDIR"
-find "$OUT_DIR/$RUN_NAME" -type f $(printf ' ! -name %s' "${KEEP_FILES[@]}") -delete
+find "$OUT_DIR" -type f $(printf ' ! -name %s' "${KEEP_FILES[@]}") -delete
