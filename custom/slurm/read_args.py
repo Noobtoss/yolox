@@ -29,7 +29,7 @@ if __name__ == "__main__":
     array_str = "1-10%4"
     task_ids  = parse_array_ids(array_str)
 
-    with open("slurm_params.txt", "r") as f:
+    with open("slurm_args.txt", "r") as f:
         text = f.read()
 
     exp_names = parse_experiments(text, task_ids)

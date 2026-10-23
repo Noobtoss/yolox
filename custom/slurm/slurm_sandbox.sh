@@ -15,17 +15,17 @@ ROOT=/nfs/scratch/staff/schmittth/code_nexus/yolox
 export TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/yolox_${SLURM_JOB_ID}_XXXXXX")
 
 # ----- GET ARGS ----------------------------------------------------
-PARAMS_FILE="$ROOT/custom/slurm/slurm_params.txt"
-PARAMS=$(grep -v '^[[:space:]]*#' "$PARAMS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
+ARGS_FILE="$ROOT/custom/slurm/slurm_args.txt"
+ARGS=$(grep -v '^[[:space:]]*#' "$ARGS_FILE" | sed -n "$((SLURM_ARRAY_TASK_ID))p")
 
 declare -A KV
-read -r -a ARR <<< "$PARAMS"
+read -r -a ARR <<< "$ARGS"
 for ((i=0; i<${#ARR[@]}; i+=2)); do
     key="${ARR[$i]}"
     value="${ARR[$i+1]}"
     KV["$key"]="$value"
 done
-[[ "$PARAMS" != *"seed"* ]] && PARAMS="$PARAMS seed ${SLURM_ARRAY_JOB_ID}"
+[[ "$ARGS" != *"seed"* ]] && ARGS="$ARGS seed ${SLURM_ARRAY_JOB_ID}"
 
 OUT_DIR="${ROOT}/runs"
 RUN_NAME="${KV[exp_name]:-unnamed_run}"
@@ -33,7 +33,7 @@ RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 EXP="${KV[exp]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
 
-PARAMS=$(echo "$PARAMS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
+ARGS=$(echo "$ARGS" | sed -E "s/(exp_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
 
 # ----- ENVIRONMENT SETUP -------------------------------------------
 module purge
@@ -66,7 +66,7 @@ python tools/train.py \
         wandb-name $RUN_NAME \
         wandb-log_checkpoints False \
     output_dir $OUT_DIR \
-    $PARAMS
+    $ARGS
 
 # ----- CLEANUP -----------------------------------------------------
 KEEP_FILES=("train_log.txt" "last_epoch_ckpt.pth")
