@@ -146,9 +146,7 @@ class Exp(_Exp):
         self.nmsthre = 0.65
 
     def merge(self, cfg_list):
-        annotation_aliases = {"train_ann": "train_ann", "test_ann": "val_ann", "val_ann": "val_ann"}
         cfg_list = list(cfg_list)
-        cfg_list[0::2] = [annotation_aliases.get(key, key) for key in cfg_list[0::2]]
         super().merge(cfg_list)
         tag_exp(self, cfg_list)
 
