@@ -4,24 +4,27 @@ from pathlib import Path
 from yolox.exp import Exp as _Exp
 
 
-def tag_exp(exp, cfg_list):
+def tag_exp(exp):
     train_folder = Path(exp.train_ann).parent.name or Path(exp.data_dir).stem
     val_folder = Path(exp.val_ann).parent.name or Path(exp.data_dir).stem
     exp.dataset_name = train_folder if train_folder == val_folder else f"{train_folder}_{val_folder}"
-    for k, v in zip(cfg_list[0::2], cfg_list[1::2]):
-        if k == "ckpt":
-            exp.model_name = Path(v).stem
     exp.imgsz = exp.img_size[0]
+    exp.epochs = exp.max_epoch
 
 
 def merge_exp_cfg(exp: _Exp, cfg_list):
-    cfg_list = list(cfg_list)
-    for i in range(0, len(cfg_list), 2):
-        if cfg_list[i] == "imgsz":
-            cfg_list[i:i + 2] = ["img_size", str((int(cfg_list[i + 1]),) * 2)]
+    key_aliases = {
+        "epochs": ("max_epoch",), "imgsz": ("img_size", "input_size", "test_size"),
+        "coco_train": ("train_ann",), "coco_test": ("val_ann",), "coco_val": ("val_ann",),
+    }
+    value_aliases = {
+        key: lambda value: str((int(value),) * 2) if str(value).isdigit() else str(value)
+        for key in ("img_size", "input_size", "test_size")
+    }
+    cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in key_aliases.get(key, (key,)) for item in (target, value)]
+    cfg_list[1::2] = [value_aliases[key](value) if key in value_aliases else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
     update_class_names(exp)
-    tag_exp(exp, cfg_list)
 
 
 def update_class_names(exp):
@@ -169,6 +172,7 @@ class Exp(_Exp):
 
     def merge(self, cfg_list):
         merge_exp_cfg(self, cfg_list)
+        tag_exp(self)
 
     def get_dataset(self, cache: bool = False, cache_type: str = "ram"):
         """

@@ -1,10 +1,38 @@
+import ast
 import time
+from pathlib import Path
+from pprint import pformat
+from textwrap import indent
 from loguru import logger
 import warnings
 import torch
 from yolox.utils import adjust_status, is_parallel, synchronize
 
 from yolox.core import Trainer as _Trainer
+
+
+def save_exp(exp, exp_file, run_dir):
+    marker = "\n\n# Resolved training configuration\n"
+    source = Path(exp_file).read_text(encoding="utf-8").split(marker, 1)[0]
+    settings = {}
+    for key, value in vars(exp).items():
+        if key.startswith("_"):
+            continue
+        try:
+            ast.literal_eval(repr(value))
+        except (ValueError, SyntaxError):
+            continue
+        settings[key] = value
+    exp_class = next(node for node in ast.parse(source).body
+                     if isinstance(node, ast.ClassDef) and node.name == "Exp")
+    init = next(node for node in exp_class.body
+                if isinstance(node, ast.FunctionDef) and node.name == "__init__")
+    snapshot = "    def __init__(self):\n        super().__init__()\n"
+    snapshot += "".join(indent(f"self.{key} = {pformat(value, sort_dicts=False)}\n", "        ")
+                        for key, value in settings.items())
+    lines = source.splitlines(keepends=True)
+    lines[init.lineno - 1:init.end_lineno] = [snapshot]
+    (Path(run_dir) / "exp.py").write_text("".join(lines), encoding="utf-8")
 
 
 class Trainer(_Trainer):
@@ -14,6 +42,8 @@ class Trainer(_Trainer):
         self.cls_feat_scheduler = None
 
     def before_train(self):
+        if self.rank == 0 and self.args.exp_file:
+            save_exp(self.exp, self.args.exp_file, self.file_name)
         super().before_train()
         # or is lr_scheduler default
         self.cls_feat_proj_head_lr_scheduler = self.exp.get_lr_scheduler(
