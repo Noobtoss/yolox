@@ -1,26 +1,93 @@
 {
-  "06Aufsatz": {
-    "exp": "custom/src/06PhD.py",
+
+  "04": {
+    "exp": "custom/src/06Base.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
+    "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/06Aufsatz/annotation_train.json",
-    "test_ann": "phd_experiments/06Aufsatz/annotation_test.json"
+    "train_ann": "phd_experiments/04/annotation_train.json",
+    "val_ann": "phd_experiments/04/annotation_val.json",
+    "epochs": 100
   },
-  "06AufsatzCopyPaste": {
-    "exp": "custom/src/06PhD.py",
+  "04Mixed": {
+    "exp": "custom/src/06Base.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
+    "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/06AufsatzCopyPaste/annotation_train.json",
-    "test_ann": "phd_experiments/06AufsatzCopyPaste/annotation_test.json"
+    "train_ann": "phd_experiments/04Mixed/annotation_train.json",
+    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "epochs": 100
   },
-  "06AufsatzCopyPasteExtended": {
-    "exp": "custom/src/06PhD.py",
+  "04Mixed50pctBottom": {
+    "exp": "custom/src/06Base.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
+    "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/06AufsatzCopyPasteExtended/annotation_train.json",
-    "test_ann": "phd_experiments/06AufsatzCopyPasteExtended/annotation_test.json"
+    "train_ann": "phd_experiments/04Mixed/annotation_train_50pctbottom.json",
+    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "epochs": 100
+  },
+    "04Mixed20pctBottom": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": 0,
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04Mixed/annotation_train_20pctbottom.json",
+    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "epochs": 100
+  },
+  "04Mixed10pctBottom": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": 0,
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04Mixed/annotation_train_10pctbottom.json",
+    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "epochs": 100
+  },
+  "04SeparateClasses": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": 0,
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04SeparateClasses/annotation_train.json",
+    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "epochs": 100
+  },
+  "04SeparateClasses50pctBottom": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": 0,
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04SeparateClasses/annotation_train_50pctbottom.json",
+    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "epochs": 100
+  },
+  "04SeparateClasses20pctBottom": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": 0,
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04SeparateClasses/annotation_train_20pctbottom.json",
+    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "epochs": 100
+  },
+  "04SeparateClasses10pctBottom": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": 0,
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04SeparateClasses/annotation_train_10pctbottom.json",
+    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "epochs": 100
   }
 }

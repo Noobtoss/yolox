@@ -1,3 +1,14 @@
-1     06Aufsatz
-2     06AufsatzCopyPaste
-3     06AufsatzCopyPasteExtended
+# Experiments YOLOX - 06Aufsatz
+1    06Aufsatz_coco
+2    06AufsatzCopyPaste_coco
+3    06AufsatzCopyPasteExtended_coco
+# Experiments YOLOX - 04
+4    04
+5    04Mixed
+6    04Mixed50pctBottom
+7    04Mixed20pctBottom
+8    04Mixed10pctBottom
+9    04SeparateClasses
+10   04SeparateClasses50pctBottom
+11   04SeparateClasses20pctBottom
+12   04SeparateClasses10pctBottom

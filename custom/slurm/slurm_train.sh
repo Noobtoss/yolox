@@ -85,7 +85,7 @@ python tools/train.py \
 
 # ----- CLEANUP -----------------------------------------------------
 [[ -f "$OUT_DIR/last_epoch_ckpt.pth" ]] && mv -f "$OUT_DIR/last_epoch_ckpt.pth" "$OUT_DIR/${RUN_NAME}.pth"
-KEEP_FILES=("train_log.txt" "${RUN_NAME}.pth")
+KEEP_FILES=("train_log.txt" "${RUN_NAME}.pth" "exp.py")
 
 for i in 1 2 3 4 5; do
     wandb sync --sync-all && break
