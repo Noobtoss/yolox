@@ -1,3 +1,8 @@
+#
+# Example call:
+#   conda activate conda-yolox
+#   python custom/group_runs.py
+#
 import argparse
 import ast
 import re
@@ -83,13 +88,18 @@ def group_runs(runs_dir, target_dir=None):
         for name, source in moves.items():
             if source != target / name:
                 print(f"  {source} -> {name}")
-                shutil.move(str(source), target / name)
+                transfer = shutil.copy2 if name == "exp.py" else shutil.move
+                transfer(str(source), target / name)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("runs_dir", type=Path, help="Directory containing the individual run folders")
-    parser.add_argument("--target_dir", type=Path, help="Output directory; defaults to results beside runs_dir")
+    parser.add_argument("--runs_dir", type=Path,
+                        default=Path(__file__).resolve().parents[1] / "runs",
+                        help="Directory containing the individual run folders")
+    parser.add_argument("--target_dir", type=Path,
+                        default=Path(__file__).resolve().parents[1] / "results",
+                        help="Output directory; defaults to the repository's results folder")
     return parser.parse_args()
 
 
