@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 from yolox.exp import Exp as _Exp
@@ -10,6 +11,27 @@ def tag_exp(exp, cfg_list):
     for k, v in zip(cfg_list[0::2], cfg_list[1::2]):
         if k == "ckpt":
             exp.model_name = Path(v).stem
+    exp.imgsz = exp.img_size[0]
+
+
+def merge_exp_cfg(exp: _Exp, cfg_list):
+    cfg_list = list(cfg_list)
+    for i in range(0, len(cfg_list), 2):
+        if cfg_list[i] == "imgsz":
+            cfg_list[i:i + 2] = ["img_size", str((int(cfg_list[i + 1]),) * 2)]
+    _Exp.merge(exp, cfg_list)
+    update_class_names(exp)
+    tag_exp(exp, cfg_list)
+
+
+def update_class_names(exp):
+    with (Path(exp.data_dir) / exp.train_ann).open() as f:
+        names = {c["id"]: c["name"] for c in json.load(f)["categories"]}
+    if exp.names != names or exp.num_classes != len(names):
+        print(f"WARNING: Updating class names and num_classes ({exp.num_classes} -> {len(names)}) "
+              f"from training annotations: {exp.train_ann}")
+        exp.names = names
+        exp.num_classes = len(names)
 
 
 class Exp(_Exp):
@@ -146,9 +168,7 @@ class Exp(_Exp):
         self.nmsthre = 0.65
 
     def merge(self, cfg_list):
-        cfg_list = list(cfg_list)
-        super().merge(cfg_list)
-        tag_exp(self, cfg_list)
+        merge_exp_cfg(self, cfg_list)
 
     def get_dataset(self, cache: bool = False, cache_type: str = "ram"):
         """

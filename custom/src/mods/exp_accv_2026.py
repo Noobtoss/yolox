@@ -2,7 +2,7 @@ import warnings
 import torch
 import torch.nn as nn
 
-from .exp import Exp as _Exp
+from .exp_base import Exp as _Exp
 from .cls_feat_loss import ClsFeatLoss
 from .cls_feat_proj_head import ClsFeatProjHead
 from .class_losses_weighted import ClassLossWeighted

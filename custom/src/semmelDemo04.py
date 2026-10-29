@@ -1,6 +1,6 @@
 import os
 
-from mods import Exp as _Exp
+from mods import ExpBase as _Exp
 
 
 class Exp(_Exp):
