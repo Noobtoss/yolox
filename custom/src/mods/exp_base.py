@@ -5,8 +5,12 @@ from yolox.exp import Exp as _Exp
 
 
 ALIASES = {
-    "epochs": ("max_epoch",), "imgsz": ("img_size", "input_size", "test_size"),
-    "coco_train": ("train_ann",), "coco_test": ("val_ann",), "coco_val": ("val_ann",),
+    "epochs": "max_epoch",
+    "imgsz": ("img_size", "input_size", "test_size"),
+    "coco_train": "train_ann",
+    "coco_test": "val_ann",
+    "coco_val": "val_ann",
+    "run_name": "exp_name",
 }
 
 VALUE_MAPPING = {
@@ -21,10 +25,12 @@ def tag(exp):
     exp.dataset_name = train_folder if train_folder == val_folder else f"{train_folder}_{val_folder}"
     exp.imgsz = exp.img_size[0]
     exp.epochs = exp.max_epoch
+    exp.run_name = exp.exp_name
 
 
 def merge_cfg(exp: _Exp, cfg_list):
-    cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in ALIASES.get(key, (key,)) for item in (target, value)]
+    aliases = {key: (value,) if isinstance(value, str) else value for key, value in ALIASES.items()}
+    cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in aliases.get(key, (key,)) for item in (target, value)]
     cfg_list[1::2] = [VALUE_MAPPING[key](value) if key in VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
     update_class_names(exp)

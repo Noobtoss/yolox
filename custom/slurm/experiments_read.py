@@ -39,6 +39,6 @@ if __name__ == "__main__":
     with open(map_file, "r") as f:
         text = f.read()
 
-    exp_names = experiments_read(text, task_ids)
-    for name in exp_names:
+    run_names = experiments_read(text, task_ids)
+    for name in run_names:
         print(name)
