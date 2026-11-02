@@ -25,7 +25,7 @@ class NormalizeEmbeddingsWrapper(nn.Module):
 class FeatLossFactory:
     @staticmethod
     def get(loss: str = None, **kwargs):
-        if loss is None or loss == "None":
+        if loss is None:
             return None
         elif loss == "sup_con_loss":
             # https://kevinmusgrave.github.io/pytorch-metric-learning/losses/#supconloss

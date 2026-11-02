@@ -59,11 +59,6 @@ CLASS_SIM_MATRIX /= CLASS_SIM_MATRIX.masked_fill(~valid, torch.nan).nanmean(dim=
 CLASS_SIM_MATRIX[~valid] = 1
 
 class_weights = {
-    'None':
-        {
-            "class_weights": None,
-            "class_weights_matrix": None,
-        },
     None:
         {
             "class_weights": None,
