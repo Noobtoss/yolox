@@ -38,7 +38,6 @@ import json, sys
 exp = json.load(open(sys.argv[1]))[sys.argv[2]]
 print(" ".join(f"{k} {v}" for k, v in exp.items()))
 ' "$EXP_ARGS_FILE" "$RUN_NAME") || { echo "ERROR: run_name '$RUN_NAME' not found in $EXP_ARGS_FILE" >&2; exit 1; }
-ARGS="run_name $RUN_NAME $ARGS"
 
 declare -A KV
 read -r -a ARR <<< "$ARGS"
@@ -51,13 +50,12 @@ done
 # ----- SET ARGS ----------------------------------------------------
 [[ "$ARGS" != *"seed"* ]] && ARGS="$ARGS seed ${SLURM_ARRAY_JOB_ID}"
 
-RUN_NAME="${KV[run_name]:-unnamed_run}"
 RUN_NAME="${RUN_NAME}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 OUT_DIR="${ROOT}/runs/${RUN_NAME}"
 EXP="${KV[exp]:-custom/src/Images04.py}"
 CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
 
-ARGS=$(echo "$ARGS" | sed -E "s/(run_name[[:space:]]+)[^[:space:]]+/\1${RUN_NAME}/")
+ARGS="$ARGS run_name $RUN_NAME"
 
 # ----- WANDB -------------------------------------------------------
 export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
