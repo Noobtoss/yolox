@@ -1,10 +1,11 @@
 # Experiments YOLOX - 04
 1    04
-2    04Mixed
-3    04Mixed50pctBottom
-4    04Mixed20pctBottom
-5    04Mixed10pctBottom
-6    04SeparateClasses
-7    04SeparateClasses50pctBottom
-8    04SeparateClasses20pctBottom
-9    04SeparateClasses10pctBottom
+2    04_scl4
+3    04Mixed
+4    04Mixed50pctBottom
+5    04Mixed20pctBottom
+6    04Mixed10pctBottom
+7    04SeparateClasses
+8    04SeparateClasses50pctBottom
+9    04SeparateClasses20pctBottom
+10   04SeparateClasses10pctBottom

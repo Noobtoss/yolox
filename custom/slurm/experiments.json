@@ -1,9 +1,20 @@
 {
-
   "04": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0,
+    "cls_feat": "None",
+    "imgsz": 640,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "phd_experiments/04/annotation_train.json",
+    "val_ann": "phd_experiments/04/annotation_val.json",
+    "epochs": 100
+  },
+  "04_scl4": {
+    "exp": "custom/src/06Full.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "cls_feat": "4",
+    "cls_feat_loss": "sup_con_loss",
+    "cls_feat_proj_head": "m",
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
     "train_ann": "phd_experiments/04/annotation_train.json",
@@ -11,7 +22,7 @@
     "epochs": 100
   },
   "04Mixed": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -21,7 +32,7 @@
     "epochs": 100
   },
   "04Mixed50pctBottom": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -31,7 +42,7 @@
     "epochs": 100
   },
     "04Mixed20pctBottom": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -41,7 +52,7 @@
     "epochs": 100
   },
   "04Mixed10pctBottom": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -51,7 +62,7 @@
     "epochs": 100
   },
   "04SeparateClasses": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -61,7 +72,7 @@
     "epochs": 100
   },
   "04SeparateClasses50pctBottom": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -71,7 +82,7 @@
     "epochs": 100
   },
   "04SeparateClasses20pctBottom": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,
@@ -81,7 +92,7 @@
     "epochs": 100
   },
   "04SeparateClasses10pctBottom": {
-    "exp": "custom/src/06Base.py",
+    "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 0,
     "imgsz": 640,

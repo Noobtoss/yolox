@@ -2,163 +2,191 @@
   "ACCV2026_baseline": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl1": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 1
+    "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl2": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 2
+    "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl4": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl6": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl8": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl10": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026_scl1_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026_scl2_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026_scl4_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026_scl6_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026_scl8_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026_scl10_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026_scl1_head_m": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026_scl2_head_m": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026_scl4_head_m": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026_scl6_head_m": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026_scl8_head_m": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026_scl10_head_m": {
     "exp": "custom/src/05ACCV2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_baseline": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl1": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 1
+    "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl2": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 2
+    "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl4": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl6": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl8": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl10": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl12": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 12
+    "cls_feat": 12,
+    "cls_feat_loss": "sup_con_loss"
   },
   "ACCV2026Plus_scl1_head_s": {
     "exp": "custom/src/05ACCV2026.py",
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl2_head_s": {
@@ -166,6 +194,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl4_head_s": {
@@ -173,6 +202,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl6_head_s": {
@@ -180,6 +210,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl8_head_s": {
@@ -187,6 +218,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl10_head_s": {
@@ -194,6 +226,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl12_head_s": {
@@ -201,6 +234,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 12,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "s"
   },
   "ACCV2026Plus_scl1_head_m": {
@@ -208,6 +242,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_scl2_head_m": {
@@ -215,6 +250,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_scl4_head_m": {
@@ -222,6 +258,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_scl6_head_m": {
@@ -229,6 +266,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_scl8_head_m": {
@@ -236,6 +274,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_scl10_head_m": {
@@ -243,6 +282,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026Plus_scl12_head_m": {
@@ -250,6 +290,7 @@
     "data_dir": "datasets/05ACCV2026Plus",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": 12,
+    "cls_feat_loss": "sup_con_loss",
     "cls_feat_proj_head": "m"
   },
   "ACCV2026_msl05": {

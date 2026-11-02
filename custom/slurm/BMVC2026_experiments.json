@@ -2,284 +2,307 @@
   "MetaFood2026_baseline": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl1": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 1
+    "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl2": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 2
+    "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl4": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl6": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl8": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl10": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss"
   },
   "MetaFood2026_scl12": {
     "exp": "custom/src/05MetaFood2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 12
+    "cls_feat": 12,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_baseline": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_scl1": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 1
+    "cls_feat": 1,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_scl2": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 2
+    "cls_feat": 2,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_scl4": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_scl6": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_scl8": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_scl10": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "sup_con_loss"
   },
   "BMVC2026_msl2": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 2
+    "cls_feat": 2,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "BMVC2026_msl4": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "BMVC2026_msl6": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "BMVC2026_msl8": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "BMVC2026_msl10": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "BMVC2026_msl12": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 12
+    "cls_feat": 12,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "BMVC2026_cl002": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.02
+    "cls_feat": 0.02,
+    "cls_feat_loss": "circle_loss"
   },
   "BMVC2026_cl005": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.05
+    "cls_feat": 0.05,
+    "cls_feat_loss": "circle_loss"
   },
   "BMVC2026_cl01": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.1
+    "cls_feat": 0.1,
+    "cls_feat_loss": "circle_loss"
   },
   "BMVC2026_cl02": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.2
+    "cls_feat": 0.2,
+    "cls_feat_loss": "circle_loss"
   },
   "BMVC2026_cl05": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.5
+    "cls_feat": 0.5,
+    "cls_feat_loss": "circle_loss"
   },
   "BMVC2026_cl10": {
     "exp": "custom/src/05BMVC2026.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 1.0
+    "cls_feat": 1.0,
+    "cls_feat_loss": "circle_loss"
   },
   "Oktoberfest_baseline": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "sup_con_loss"
   },
   "Oktoberfest_scl4": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss"
   },
   "Oktoberfest_scl6": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss"
   },
   "Oktoberfest_scl8": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss"
   },
   "Oktoberfest_baseline_circle": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "circle_loss"
   },
   "Oktoberfest_cl005": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.05
+    "cls_feat": 0.05,
+    "cls_feat_loss": "circle_loss"
   },
   "Oktoberfest_cl01": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.1
+    "cls_feat": 0.1,
+    "cls_feat_loss": "circle_loss"
   },
   "Oktoberfest_cl015": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.15
+    "cls_feat": 0.15,
+    "cls_feat_loss": "circle_loss"
   },
   "Oktoberfest_baseline_msl": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "Oktoberfest_msl6": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "Oktoberfest_msl8": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "Oktoberfest_msl10": {
     "exp": "custom/src/Oktoberfest.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "UNIMIB2016_baseline": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "sup_con_loss"
   },
   "UNIMIB2016_scl4": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 4
+    "cls_feat": 4,
+    "cls_feat_loss": "sup_con_loss"
   },
   "UNIMIB2016_scl6": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "sup_con_loss"
   },
   "UNIMIB2016_scl8": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "sup_con_loss"
   },
   "UNIMIB2016_baseline_circle": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "circle_loss"
   },
   "UNIMIB2016_cl005": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.05
+    "cls_feat": 0.05,
+    "cls_feat_loss": "circle_loss"
   },
   "UNIMIB2016_cl01": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.1
+    "cls_feat": 0.1,
+    "cls_feat_loss": "circle_loss"
   },
   "UNIMIB2016_cl015": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "circle_loss",
-    "cls_feat": 0.15
+    "cls_feat": 0.15,
+    "cls_feat_loss": "circle_loss"
   },
   "UNIMIB2016_baseline_msl": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 0
+    "cls_feat": 0,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "UNIMIB2016_msl6": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 6
+    "cls_feat": 6,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "UNIMIB2016_msl8": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 8
+    "cls_feat": 8,
+    "cls_feat_loss": "multi_sim_loss"
   },
   "UNIMIB2016_msl10": {
     "exp": "custom/src/UNIMIB2016.py",
     "ckpt": "checkpoints/yolox_x.pth",
-    "cls_feat_loss": "multi_sim_loss",
-    "cls_feat": 10
+    "cls_feat": 10,
+    "cls_feat_loss": "multi_sim_loss"
   }
 }
