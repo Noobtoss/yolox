@@ -36,7 +36,7 @@ class YOLOXHead(_YOLOXHead):
         self.cls_feat = cls_feat or 0
         self.cls_feat_loss = cls_feat_loss
         self.cls_feat_proj_head = cls_feat_proj_head
-        self.cls_feat_dim = 320  # hard encoding dangerous
+        self.cls_feat_dim = int(256 * width)
 
     def forward(self, xin, labels=None, imgs=None):  # added class feat loss
         outputs = []

@@ -1,13 +1,12 @@
 import os
 
-from mods import Exp06Base
+from mods import ExpFull
 
 
-class Exp(Exp06Base):
+class Exp(ExpFull):
     def __init__(self):
         super().__init__()
         self.class_weights = None
-        self.cls_feat_dim = 320  # hard encoding dangerous
         self.cls_feat = 0
         self.cls_feat_loss = "sup_con_loss"
         self.cls_feat_temperature = 0.07
@@ -80,19 +79,21 @@ class Exp(Exp06Base):
 
         # ---------------- model config ---------------- #
 
-        scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
+        self.scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
 
-        if scale == "yolox_s":
+        if self.scale == "yolox_s":
             self.depth = 0.33
             self.width = 0.50
-        if scale == "yolox_m":
+        if self.scale == "yolox_m":
             self.depth = 0.67
             self.width = 0.75
-        if scale == "yolox_l":
+        if self.scale == "yolox_l":
             self.depth = 1.0
             self.width = 1.0
-        if scale == "yolox_x":
+        if self.scale == "yolox_x":
             self.depth = 1.33
             self.width = 1.25
 
-        # self.ckpt = f"checkpoints/{scale}.pth"
+        self.cls_feat_dim = int(256 * self.width)
+
+        # self.ckpt = f"checkpoints/{self.scale}.pth"

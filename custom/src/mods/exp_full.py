@@ -23,7 +23,6 @@ class Exp(_Exp):
         super().__init__()
         self.save_history_ckpt      = False  # True
         self.cls_feat               = None   # 1
-        self.cls_feat_dim           = 320    # hard encoding dangerous
         self.cls_feat_loss          = None   # SupervisedContrastiveLoss()
         self.cls_feat_temperature   = 0.07
         self.cls_feat_proj_head     = None
@@ -84,7 +83,7 @@ class Exp(_Exp):
     def get_model(self):
         from yolox.models import YOLOPAFPN
         from .yolox import YOLOX
-        from .yolox_head_phd import YOLOXHead
+        from .yolox_head_full import YOLOXHead
 
         if self.cls_feat_loss is None:
             raise NotImplementedError("cls_feat_loss must be set before calling get_model().")

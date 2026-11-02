@@ -52,19 +52,21 @@ class Exp(_Exp):
 
         # ---------------- model config ---------------- #
 
-        scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
+        self.scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
 
-        if scale == "yolox_s":
+        if self.scale == "yolox_s":
             self.depth = 0.33
             self.width = 0.50
-        if scale == "yolox_m":
+        if self.scale == "yolox_m":
             self.depth = 0.67
             self.width = 0.75
-        if scale == "yolox_l":
+        if self.scale == "yolox_l":
             self.depth = 1.0
             self.width = 1.0
-        if scale == "yolox_x":
+        if self.scale == "yolox_x":
             self.depth = 1.33
             self.width = 1.25
 
-        # self.ckpt = f"checkpoints/{scale}.pth"
+        self.cls_feat_dim = int(256 * self.width)
+
+        # self.ckpt = f"checkpoints/{self.scale}.pth"

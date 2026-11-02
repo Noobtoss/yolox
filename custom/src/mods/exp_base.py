@@ -53,6 +53,7 @@ def update_model_scale(exp):
     if exp.scale not in scales:
         raise ValueError(f"Unknown scale {exp.scale!r}; expected one of {tuple(scales)}")
     exp.depth, exp.width = scales[exp.scale]
+    exp.cls_feat_dim = int(256 * exp.width)
 
 
 def update_class_names(exp):
@@ -112,7 +113,9 @@ class Exp(_Exp):
             self.depth = 1.33
             self.width = 1.25
 
-        # self.ckpt = f"checkpoints/{scale}.pth"
+        self.cls_feat_dim = int(256 * self.width)
+
+        # self.ckpt = f"checkpoints/{self.scale}.pth"
         self.ckpt = None
 
         # activation name. For example, if using "relu", then "silu" will be replaced to "relu".
