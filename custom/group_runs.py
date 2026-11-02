@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 
-IGNORED_FIELDS = {"seed", "exp_name", "output_dir"}
+IGNORED_FIELDS = {"seed", "exp_name", "run_name", "output_dir"}
 
 
 class IgnoreRunFields(ast.NodeTransformer):
