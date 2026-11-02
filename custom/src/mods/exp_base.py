@@ -4,6 +4,17 @@ from pathlib import Path
 from yolox.exp import Exp as _Exp
 
 
+CFG_ALIASES = {
+    "epochs": ("max_epoch",), "imgsz": ("img_size", "input_size", "test_size"),
+    "coco_train": ("train_ann",), "coco_test": ("val_ann",), "coco_val": ("val_ann",),
+}
+
+CFG_VALUE_MAPPING = {
+    key: lambda value: str((int(value),) * 2) if str(value).isdigit() else str(value)
+    for key in ("img_size", "input_size", "test_size")
+}
+
+
 def tag_exp(exp):
     train_folder = Path(exp.train_ann).parent.name or Path(exp.data_dir).stem
     val_folder = Path(exp.val_ann).parent.name or Path(exp.data_dir).stem
@@ -13,16 +24,8 @@ def tag_exp(exp):
 
 
 def merge_exp_cfg(exp: _Exp, cfg_list):
-    key_aliases = {
-        "epochs": ("max_epoch",), "imgsz": ("img_size", "input_size", "test_size"),
-        "coco_train": ("train_ann",), "coco_test": ("val_ann",), "coco_val": ("val_ann",),
-    }
-    value_aliases = {
-        key: lambda value: str((int(value),) * 2) if str(value).isdigit() else str(value)
-        for key in ("img_size", "input_size", "test_size")
-    }
-    cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in key_aliases.get(key, (key,)) for item in (target, value)]
-    cfg_list[1::2] = [value_aliases[key](value) if key in value_aliases else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
+    cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in CFG_ALIASES.get(key, (key,)) for item in (target, value)]
+    cfg_list[1::2] = [CFG_VALUE_MAPPING[key](value) if key in CFG_VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
     update_class_names(exp)
 
