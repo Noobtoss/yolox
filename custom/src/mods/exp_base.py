@@ -20,12 +20,13 @@ VALUE_MAPPING = {
 
 
 def tag(exp):
+    exp.run_name = exp.exp_name
+    exp.model_name = exp.scale
     train_folder = Path(exp.train_ann).parent.name or Path(exp.data_dir).stem
     val_folder = Path(exp.val_ann).parent.name or Path(exp.data_dir).stem
     exp.dataset_name = train_folder if train_folder == val_folder else f"{train_folder}_{val_folder}"
     exp.imgsz = exp.img_size[0]
     exp.epochs = exp.max_epoch
-    exp.run_name = exp.exp_name
 
 
 def merge_cfg(exp: _Exp, cfg_list):
@@ -33,7 +34,25 @@ def merge_cfg(exp: _Exp, cfg_list):
     cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in aliases.get(key, (key,)) for item in (target, value)]
     cfg_list[1::2] = [VALUE_MAPPING[key](value) if key in VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
+    update_model_scale(exp)
     update_class_names(exp)
+
+
+def update_model_scale(exp):
+    scales = {
+        "yolox_s": (0.33, 0.50),
+        "yolox_m": (0.67, 0.75),
+        "yolox_l": (1.0, 1.0),
+        "yolox_x": (1.33, 1.25),
+    }
+    ckpt_name = Path(exp.ckpt).stem if exp.ckpt else None
+    if ckpt_name in scales:
+        if exp.scale != ckpt_name:
+            print(f"WARNING: Updating scale ({exp.scale} -> {ckpt_name}) from checkpoint: {exp.ckpt}")
+        exp.scale = ckpt_name
+    if exp.scale not in scales:
+        raise ValueError(f"Unknown scale {exp.scale!r}; expected one of {tuple(scales)}")
+    exp.depth, exp.width = scales[exp.scale]
 
 
 def update_class_names(exp):
@@ -78,22 +97,23 @@ class Exp(_Exp):
 
         # ---------------- model config ---------------- #
 
-        scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
+        self.scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
 
-        if scale == "yolox_s":
+        if self.scale == "yolox_s":
             self.depth = 0.33
             self.width = 0.50
-        if scale == "yolox_m":
+        if self.scale == "yolox_m":
             self.depth = 0.67
             self.width = 0.75
-        if scale == "yolox_l":
+        if self.scale == "yolox_l":
             self.depth = 1.0
             self.width = 1.0
-        if scale == "yolox_x":
+        if self.scale == "yolox_x":
             self.depth = 1.33
             self.width = 1.25
 
         # self.ckpt = f"checkpoints/{scale}.pth"
+        self.ckpt = None
 
         # activation name. For example, if using "relu", then "silu" will be replaced to "relu".
         self.act = "silu"
