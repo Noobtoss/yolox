@@ -5,8 +5,8 @@
     "cls_feat": "None",
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04/annotation_train.json",
-    "val_ann": "phd_experiments/04/annotation_val.json",
+    "train_ann": "experiments/04/annotation_train.json",
+    "val_ann": "experiments/04/annotation_val.json",
     "epochs": 100
   },
   "04_scl4_head_m": {
@@ -17,8 +17,8 @@
     "cls_feat_proj_head": "m",
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04/annotation_train.json",
-    "val_ann": "phd_experiments/04/annotation_val.json",
+    "train_ann": "experiments/04/annotation_train.json",
+    "val_ann": "experiments/04/annotation_val.json",
     "epochs": 100
   },
   "04Mixed": {
@@ -27,8 +27,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04Mixed/annotation_train.json",
-    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "train_ann": "experiments/04Mixed/annotation_train.json",
+    "val_ann": "experiments/04Mixed/annotation_val.json",
     "epochs": 100
   },
   "04Mixed50pctBottom": {
@@ -37,8 +37,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04Mixed/annotation_train_50pctbottom.json",
-    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "train_ann": "experiments/04Mixed/annotation_train_50pctbottom.json",
+    "val_ann": "experiments/04Mixed/annotation_val.json",
     "epochs": 100
   },
     "04Mixed20pctBottom": {
@@ -47,8 +47,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04Mixed/annotation_train_20pctbottom.json",
-    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "train_ann": "experiments/04Mixed/annotation_train_20pctbottom.json",
+    "val_ann": "experiments/04Mixed/annotation_val.json",
     "epochs": 100
   },
   "04Mixed10pctBottom": {
@@ -57,8 +57,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04Mixed/annotation_train_10pctbottom.json",
-    "val_ann": "phd_experiments/04Mixed/annotation_val.json",
+    "train_ann": "experiments/04Mixed/annotation_train_10pctbottom.json",
+    "val_ann": "experiments/04Mixed/annotation_val.json",
     "epochs": 100
   },
   "04SeparateClasses": {
@@ -67,8 +67,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04SeparateClasses/annotation_train.json",
-    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "train_ann": "experiments/04SeparateClasses/annotation_train.json",
+    "val_ann": "experiments/04SeparateClasses/annotation_val.json",
     "epochs": 100
   },
   "04SeparateClasses50pctBottom": {
@@ -77,8 +77,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04SeparateClasses/annotation_train_50pctbottom.json",
-    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "train_ann": "experiments/04SeparateClasses/annotation_train_50pctbottom.json",
+    "val_ann": "experiments/04SeparateClasses/annotation_val.json",
     "epochs": 100
   },
   "04SeparateClasses20pctBottom": {
@@ -87,8 +87,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04SeparateClasses/annotation_train_20pctbottom.json",
-    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "train_ann": "experiments/04SeparateClasses/annotation_train_20pctbottom.json",
+    "val_ann": "experiments/04SeparateClasses/annotation_val.json",
     "epochs": 100
   },
   "04SeparateClasses10pctBottom": {
@@ -97,8 +97,8 @@
     "cls_feat": 0,
     "imgsz": 640,
     "data_dir": "../../data_hub/datasets",
-    "train_ann": "phd_experiments/04SeparateClasses/annotation_train_10pctbottom.json",
-    "val_ann": "phd_experiments/04SeparateClasses/annotation_val.json",
+    "train_ann": "experiments/04SeparateClasses/annotation_train_10pctbottom.json",
+    "val_ann": "experiments/04SeparateClasses/annotation_val.json",
     "epochs": 100
   }
 }
