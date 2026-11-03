@@ -1,6 +1,6 @@
 # Experiments YOLOX - 04
 1    04
-2    04_scl4
+2    04_scl4_head_m
 3    04Mixed
 4    04Mixed50pctBottom
 5    04Mixed20pctBottom

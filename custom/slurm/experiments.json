@@ -9,7 +9,7 @@
     "val_ann": "phd_experiments/04/annotation_val.json",
     "epochs": 100
   },
-  "04_scl4": {
+  "04_scl4_head_m": {
     "exp": "custom/src/06Full.py",
     "ckpt": "checkpoints/yolox_x.pth",
     "cls_feat": "4",
