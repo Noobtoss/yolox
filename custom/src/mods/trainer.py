@@ -1,4 +1,5 @@
 import ast
+import os
 import time
 from pathlib import Path
 from pprint import pformat
@@ -6,9 +7,21 @@ from textwrap import indent
 from loguru import logger
 import warnings
 import torch
-from yolox.utils import adjust_status, is_parallel, synchronize
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.tensorboard import SummaryWriter
+from yolox.data import DataPrefetcher
+from yolox.utils import (
+    MlflowLogger,
+    ModelEMA,
+    adjust_status,
+    get_model_info,
+    is_parallel,
+    occupy_mem,
+    synchronize,
+)
 
 from yolox.core import Trainer as _Trainer
+from .wandb_logger import WandbLogger as WandbLogger
 
 
 def save_exp(exp, exp_file, run_dir):
@@ -42,9 +55,79 @@ class Trainer(_Trainer):
         self.cls_feat_scheduler = None
 
     def before_train(self):
+        # >>> MOD
         if self.rank == 0 and self.args.exp_file:
             save_exp(self.exp, self.args.exp_file, self.file_name)
-        super().before_train()
+        # <<< MOD
+        logger.info("args: {}".format(self.args))
+        logger.info("exp value:\n{}".format(self.exp))
+
+        # model related init
+        torch.cuda.set_device(self.local_rank)
+        model = self.exp.get_model()
+        logger.info(
+            "Model Summary: {}".format(get_model_info(model, self.exp.test_size))
+        )
+        model.to(self.device)
+
+        # solver related init
+        self.optimizer = self.exp.get_optimizer(self.args.batch_size)
+
+        # value of epoch will be set in `resume_train`
+        model = self.resume_train(model)
+
+        # data related init
+        self.no_aug = self.start_epoch >= self.max_epoch - self.exp.no_aug_epochs
+        self.train_loader = self.exp.get_data_loader(
+            batch_size=self.args.batch_size,
+            is_distributed=self.is_distributed,
+            no_aug=self.no_aug,
+            cache_img=self.args.cache,
+        )
+        logger.info("init prefetcher, this might take one minute or less...")
+        self.prefetcher = DataPrefetcher(self.train_loader)
+        # max_iter means iters per epoch
+        self.max_iter = len(self.train_loader)
+
+        self.lr_scheduler = self.exp.get_lr_scheduler(
+            self.exp.basic_lr_per_img * self.args.batch_size, self.max_iter
+        )
+        if self.args.occupy:
+            occupy_mem(self.local_rank)
+
+        if self.is_distributed:
+            model = DDP(model, device_ids=[self.local_rank], broadcast_buffers=False)
+
+        if self.use_model_ema:
+            self.ema_model = ModelEMA(model, 0.9998)
+            self.ema_model.updates = self.max_iter * self.start_epoch
+
+        self.model = model
+
+        self.evaluator = self.exp.get_evaluator(
+            batch_size=self.args.batch_size, is_distributed=self.is_distributed
+        )
+        # Tensorboard and Wandb loggers
+        if self.rank == 0:
+            if self.args.logger == "tensorboard":
+                self.tblogger = SummaryWriter(os.path.join(self.file_name, "tensorboard"))
+            elif self.args.logger == "wandb":
+                # >>> MOD
+                self.wandb_logger = WandbLogger.initialize_wandb_logger(
+                    self.args,
+                    self.exp,
+                    self.evaluator.dataloader.dataset
+                )
+                # <<< MOD
+            elif self.args.logger == "mlflow":
+                self.mlflow_logger = MlflowLogger()
+                self.mlflow_logger.setup(args=self.args, exp=self.exp)
+            else:
+                raise ValueError("logger must be either 'tensorboard', 'mlflow' or 'wandb'")
+
+        logger.info("Training start...")
+        logger.info("\n{}".format(model))
+        # >>> MOD
         # or is lr_scheduler default
         self.cls_feat_proj_head_lr_scheduler = self.exp.get_lr_scheduler(
             getattr(self.exp, "cls_feat_proj_head_lr", None) or self.exp.basic_lr_per_img * self.args.batch_size,
@@ -52,6 +135,7 @@ class Trainer(_Trainer):
         )
         if hasattr(self.exp, 'get_cls_feat_scheduler'):
             self.cls_feat_scheduler = self.exp.get_cls_feat_scheduler(self.exp.cls_feat)
+        # <<< MOD
 
     def before_epoch(self):
         # only update cls_feat_gain per epoch

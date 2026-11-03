@@ -267,11 +267,12 @@ class YOLOXHead(_YOLOXHead):
         obj_targets = torch.cat(obj_targets, 0)
         fg_masks = torch.cat(fg_masks, 0)
         # >>> MOD
-        # Exclude zero-IoU matches: their class targets are all zero.
-        nonzero_iou_mask = cls_targets.any(dim=-1)
-        cls_feats = cls_feats.view(-1, self.cls_feat_dim)[fg_masks]
-        if self.cls_feat_proj_head is not None:
-            cls_feats = self.cls_feat_proj_head(cls_feats)
+        if self.cls_feat_loss is not None:
+            # Exclude zero-IoU matches: their class targets are all zero.
+            nonzero_iou_mask = cls_targets.any(dim=-1)
+            cls_feats = cls_feats.view(-1, self.cls_feat_dim)[fg_masks]
+            if self.cls_feat_proj_head is not None:
+                cls_feats = self.cls_feat_proj_head(cls_feats)
         # <<< MOD
         if self.use_l1:
             l1_targets = torch.cat(l1_targets, 0)
@@ -299,14 +300,14 @@ class YOLOXHead(_YOLOXHead):
 
         reg_weight = 5.0
         # >>> MOD
-        if nonzero_iou_mask.sum():
+        loss = reg_weight * loss_iou + loss_obj + loss_cls + loss_l1
+
+        loss_cls_feats = 0
+        if self.cls_feat_loss is not None and nonzero_iou_mask.sum():
             loss_cls_feats = (
                 self.cls_feat_loss(cls_feats=cls_feats[nonzero_iou_mask], target_scores=cls_targets[nonzero_iou_mask])
             )
-        else:
-            loss_cls_feats = 0.0
-
-        loss = reg_weight * loss_iou + loss_obj + loss_cls + self.cls_feat * loss_cls_feats + loss_l1
+            loss = loss + self.cls_feat * loss_cls_feats
 
         return (
             loss,

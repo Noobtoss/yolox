@@ -9,15 +9,6 @@ from .class_losses_weighted import ClassLossWeighted
 from .class_weights import class_weights
 
 
-EXP_FLOAT_VALUES = {"cls_feat"}
-
-
-def check_exp_value(exp):
-    for value in EXP_FLOAT_VALUES:
-        if getattr(exp, value, None) is not None:
-            setattr(exp, value, float(getattr(exp, value)))
-
-
 class Exp(_Exp):
     def __init__(self):
         super().__init__()
@@ -28,10 +19,6 @@ class Exp(_Exp):
         self.cls_feat_proj_head     = None
         self.cls_feat_proj_head_lr  = None
         self.cls_feat_scheduler     = None
-
-    def merge(self, cfg_list):
-        super().merge(cfg_list)
-        check_exp_value(self)
 
     def get_evaluator(self, batch_size, is_distributed, testdev=False, legacy=False):
         from .coco_evaluator import COCOEvaluator
@@ -85,11 +72,6 @@ class Exp(_Exp):
         from .yolox import YOLOX
         from .yolox_head_accv_2026 import YOLOXHead
 
-        if self.cls_feat_loss is None:
-            raise NotImplementedError("cls_feat_loss must be set before calling get_model().")
-        else:
-            print(f"cls_feat_loss: {self.cls_feat_loss}")
-
         def init_yolo(M):
             for m in M.modules():
                 if isinstance(m, nn.BatchNorm2d):
@@ -102,13 +84,16 @@ class Exp(_Exp):
 
             weights = getattr(self, "_class_weights", None) or class_weights[getattr(self, "class_weights", None)]
             class_loss = ClassLossWeighted(**weights)
-            kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
-            cls_feat_loss = getattr(self, "_cls_feat_loss", None) or ClsFeatLoss(**kwargs)
-            cls_feat_proj_head = (
-                (getattr(self, "_cls_feat_proj_head", None) or ClsFeatProjHead(**kwargs))
-                if kwargs["proj_head"] is not None
-                else None
-            )
+            cls_feat_loss = None
+            cls_feat_proj_head = None
+            if self.cls_feat_loss is not None:
+                kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
+                cls_feat_loss = getattr(self, "_cls_feat_loss", None) or ClsFeatLoss(**kwargs)
+                cls_feat_proj_head = (
+                    (getattr(self, "_cls_feat_proj_head", None) or ClsFeatProjHead(**kwargs))
+                    if kwargs["proj_head"] is not None
+                    else None
+                )
 
             head = YOLOXHead(self.num_classes, self.width, in_channels=in_channels, act=self.act,
                              class_loss=class_loss,
@@ -127,7 +112,7 @@ class Exp(_Exp):
         kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
         scheduler = ClsFeatScheduler(
             getattr(self, "cls_feat_scheduler", None) or "constant",
-            cls_feat,
+            cls_feat or 0,
             self.max_epoch,
             **kwargs
         )

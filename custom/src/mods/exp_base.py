@@ -19,6 +19,18 @@ VALUE_MAPPING = {
 }
 
 
+EXP_FLOAT_VALUES = {"cls_feat"}
+
+
+def check_exp_value(exp):
+    if getattr(exp, "cls_feat", None) is None:
+        exp.cls_feat_loss = None
+        exp.cls_feat_scheduler = None
+    for value in EXP_FLOAT_VALUES:
+        if getattr(exp, value, None) is not None:
+            setattr(exp, value, float(getattr(exp, value)))
+
+
 def tag(exp):
     exp.run_name = exp.exp_name
     exp.model_name = exp.scale
@@ -34,6 +46,7 @@ def merge_cfg(exp: _Exp, cfg_list):
     cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in aliases.get(key, (key,)) for item in (target, value)]
     cfg_list[1::2] = [VALUE_MAPPING[key](value) if key in VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
+    vars(exp).update({key: None for key, value in vars(exp).items() if isinstance(value, str) and value == "None"})
     update_model_scale(exp)
     update_class_names(exp)
 
@@ -205,6 +218,7 @@ class Exp(_Exp):
     def merge(self, cfg_list):
         merge_cfg(self, cfg_list)
         tag(self)
+        check_exp_value(self)
 
     def get_dataset(self, cache: bool = False, cache_type: str = "ram"):
         """
