@@ -39,7 +39,7 @@ def read_exp(exp_path):
     return ast.dump(IgnoreRunFields().visit(tree), include_attributes=False)
 
 
-def group_runs(runs_dir, target_dir=None, valid_only=True):
+def group_runs(runs_dir, target_dir=None, valid_only=True, tag_runs=False):
     runs_dir = Path(runs_dir).resolve()
     target_dir = Path(target_dir).resolve() if target_dir is not None else runs_dir.parent / "results"
     if not runs_dir.is_dir():
@@ -59,7 +59,7 @@ def group_runs(runs_dir, target_dir=None, valid_only=True):
     plans = []
     completed = []
     for group, runs in groups.items():
-        target = target_dir / group
+        target = target_dir / "yolox" / group if tag_runs else target_dir / group
         reference_path = target / "exp.py" if target.exists() or target.is_symlink() else None
         reference = read_exp(reference_path) if reference_path else None
         moves = {}
@@ -100,23 +100,6 @@ def group_runs(runs_dir, target_dir=None, valid_only=True):
         (run / "TRAIN_SUCCESS").unlink(missing_ok=True)
 
 
-def tag_runs(target_dir):
-    target_dir = Path(target_dir).resolve()
-    if not target_dir.is_dir():
-        return
-    for exp in sorted(target_dir.iterdir()):
-        exp_path = exp / "exp.py"
-        if not exp.is_dir() or not exp_path.is_file():
-            continue
-        target = target_dir / "yolox" / exp.name
-        if target.exists() or target.is_symlink():
-            print(f"Skipping {exp}: destination already in use: {target}")
-            continue
-        target.parent.mkdir(parents=True, exist_ok=True)
-        print(f"Moving {exp} -> {target}")
-        shutil.move(str(exp), target)
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--runs_dir",
@@ -146,6 +129,4 @@ if __name__ == "__main__":
             target_dir=Path(__file__).resolve().parents[3] / "data_hub/results",
             valid_only=True,
         )
-    group_runs(args.runs_dir, args.target_dir, args.valid_only)
-    if args.runs_dir.parent != args.target_dir.parent:
-        tag_runs(args.target_dir)
+    group_runs(args.runs_dir, args.target_dir, args.valid_only, tag_runs=args.runs_dir.parent != args.target_dir.parent)
