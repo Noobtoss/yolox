@@ -1,268 +1,120 @@
-import json
-import os
-from pathlib import Path
-from yolox.exp import Exp as _Exp
+import warnings
+import torch
+import torch.nn as nn
 
-
-ALIASES = {
-    "epochs": "max_epoch",
-    "imgsz": ("img_size", "input_size", "test_size"),
-    "coco_train": "train_ann",
-    "coco_test": "val_ann",
-    "coco_val": "val_ann",
-    "run_name": "exp_name",
-}
-
-VALUE_MAPPING = {
-    key: lambda value: str((int(value),) * 2) if str(value).isdigit() else str(value)
-    for key in ("img_size", "input_size", "test_size")
-}
-
-
-EXP_FLOAT_VALUES = {"cls_feat"}
-
-
-def check_exp_value(exp):
-    if getattr(exp, "cls_feat", None) is None:
-        exp.cls_feat_loss = None
-        exp.cls_feat_scheduler = None
-    for value in EXP_FLOAT_VALUES:
-        if getattr(exp, value, None) is not None:
-            setattr(exp, value, float(getattr(exp, value)))
-
-
-def tag(exp):
-    exp.run_name = exp.exp_name
-    exp.model_name = exp.scale
-    train_folder = Path(exp.train_ann).parent.name or Path(exp.data_dir).stem
-    val_folder = Path(exp.val_ann).parent.name or Path(exp.data_dir).stem
-    exp.dataset_name = train_folder if train_folder == val_folder else f"{train_folder}_{val_folder}"
-    exp.imgsz = exp.img_size[0]
-    exp.epochs = exp.max_epoch
-
-
-def merge_cfg(exp: _Exp, cfg_list):
-    aliases = {key: (value,) if isinstance(value, str) else value for key, value in ALIASES.items()}
-    cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in aliases.get(key, (key,)) for item in (target, value)]
-    cfg_list[1::2] = [VALUE_MAPPING[key](value) if key in VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
-    _Exp.merge(exp, cfg_list)
-    vars(exp).update({key: None for key, value in vars(exp).items() if isinstance(value, str) and value == "None"})
-    update_model_scale(exp)
-    update_class_names(exp)
-
-
-def update_model_scale(exp):
-    scales = {
-        "yolox_s": (0.33, 0.50),
-        "yolox_m": (0.67, 0.75),
-        "yolox_l": (1.0, 1.0),
-        "yolox_x": (1.33, 1.25),
-    }
-    ckpt_name = Path(exp.ckpt).stem if exp.ckpt else None
-    if ckpt_name in scales:
-        if exp.scale != ckpt_name:
-            print(f"WARNING: Updating scale ({exp.scale} -> {ckpt_name}) from checkpoint: {exp.ckpt}")
-        exp.scale = ckpt_name
-    if exp.scale not in scales:
-        raise ValueError(f"Unknown scale {exp.scale!r}; expected one of {tuple(scales)}")
-    exp.depth, exp.width = scales[exp.scale]
-    exp.cls_feat_dim = int(256 * exp.width)
-
-
-def update_class_names(exp):
-    with (Path(exp.data_dir) / exp.train_ann).open() as f:
-        names = {c["id"]: c["name"] for c in json.load(f)["categories"]}
-    if exp.names != names or exp.num_classes != len(names):
-        print(f"WARNING: Updating class names and num_classes ({exp.num_classes} -> {len(names)}) "
-              f"from training annotations: {exp.train_ann}")
-        exp.names = names
-        exp.num_classes = len(names)
+from .exp import Exp as _Exp
+from .cls_feat_loss import ClsFeatLoss
+from .cls_feat_proj_head import ClsFeatProjHead
+from .class_losses_weighted import ClassLossWeighted
+from .class_weights import class_weights
 
 
 class Exp(_Exp):
     def __init__(self):
         super().__init__()
+        self.save_history_ckpt      = False  # True
+        self.cls_feat               = None   # 1
+        self.cls_feat_loss          = None   # SupervisedContrastiveLoss()
+        self.cls_feat_temperature   = 0.07
+        self.cls_feat_proj_head     = None
+        self.cls_feat_proj_head_lr  = None
+        self.cls_feat_scheduler     = None
 
-        self.output_dir = "./runs"
+    def get_evaluator(self, batch_size, is_distributed, testdev=False, legacy=False):
+        from .coco_evaluator import COCOEvaluator
 
-        # ---------------- semmel config ---------------- #
-
-        self.num_classes = 17
-        self.names = {
-            1: "Backware",
-            2: "Bauernbrot",
-            3: "Floesserbrot",
-            4: "Salzstange",
-            5: "Sonnenblumensemmel",
-            6: "Kuerbiskernsemmel",
-            7: "Roggensemmel",
-            8: "Dinkelsemmel",
-            9: "LaugenstangeSchinkenKaese",
-            10: "Pfefferlaugenbrezel",
-            11: "KernigeStange",
-            12: "Schokocroissant",
-            13: "Apfeltasche",
-            14: "Quarktasche",
-            15: "Mohnschnecke",
-            16: "Nussschnecke",
-            17: "Vanillehoernchen"
-        }
-        self.img_size = (1280, 1280)  # (640, 640)  # (height, width)
-
-        # ---------------- model config ---------------- #
-
-        self.scale = "yolox_x"  # "yolox_m" # "yolox_l" # "yolox_x"
-
-        if self.scale == "yolox_s":
-            self.depth = 0.33
-            self.width = 0.50
-        if self.scale == "yolox_m":
-            self.depth = 0.67
-            self.width = 0.75
-        if self.scale == "yolox_l":
-            self.depth = 1.0
-            self.width = 1.0
-        if self.scale == "yolox_x":
-            self.depth = 1.33
-            self.width = 1.25
-
-        self.cls_feat_dim = int(256 * self.width)
-
-        # self.ckpt = f"checkpoints/{self.scale}.pth"
-        self.ckpt = None
-
-        # activation name. For example, if using "relu", then "silu" will be replaced to "relu".
-        self.act = "silu"
-
-        # ---------------- dataloader config ---------------- #
-        # set worker to 4 for shorter dataloader init time
-        # If your training process cost many memory, reduce this value.
-        self.data_num_workers = 4
-        self.input_size = self.img_size or (1280, 1280)  # (height, width)
-        # Actual multiscale ranges: [640 - 5 * 32, 640 + 5 * 32].
-        # To disable multiscale training, set the value to 0.
-        self.multiscale_range = 5
-        # You can uncomment this line to specify a multiscale range
-        # self.random_size = (14, 26)
-        # dir of dataset images, if data_dir is None, this project will use `datasets` dir
-        self.data_dir = None
-        # name of annotation file for training
-        self.train_ann = "annotation_train.json"
-        # name of annotation file for evaluation
-        self.val_ann = "annotation_val.json"
-        # name of annotation file for testing
-        self.test_ann = "annotation_test.json"
-
-        # --------------- transform config ----------------- #
-        # prob of applying mosaic aug
-        self.mosaic_prob = 1.0
-        # prob of applying mixup aug
-        self.mixup_prob = 1.0
-        # prob of applying hsv aug
-        self.hsv_prob = 1.0
-        # prob of applying flip aug
-        self.flip_prob = 0.5
-        # rotation angle range, for example, if set to 2, the true range is (-2, 2)
-        self.degrees = 10.0
-        # translate range, for example, if set to 0.1, the true range is (-0.1, 0.1)
-        self.translate = 0.1
-        self.mosaic_scale = (0.1, 2)
-        # apply mixup aug or not
-        self.enable_mixup = True
-        self.mixup_scale = (0.5, 1.5)
-        # shear angle range, for example, if set to 2, the true range is (-2, 2)
-        self.shear = 2.0
-
-        # --------------  training config --------------------- #
-        # epoch number used for warmup
-        self.warmup_epochs = 5
-        # max training epoch
-        self.max_epoch = 300
-        # minimum learning rate during warmup
-        self.warmup_lr = 0
-        self.min_lr_ratio = 0.05
-        # learning rate for one image. During training, lr will multiply batchsize.
-        self.basic_lr_per_img = 0.01 / 64.0
-        # name of LRScheduler
-        self.scheduler = "yoloxwarmcos"
-        # last #epoch to close augmention like mosaic
-        self.no_aug_epochs = 15
-        # apply EMA during training
-        self.ema = True
-
-        # weight decay of optimizer
-        self.weight_decay = 5e-4
-        # momentum of optimizer
-        self.momentum = 0.9
-        # log period in iter, for example,
-        # if set to 1, user could see log every iteration.
-        self.print_interval = 10
-        # eval period in epoch, for example,
-        # if set to 1, model will be evaluate after every epoch.
-        self.eval_interval = 10
-        # save history checkpoint or not.
-        # If set to False, yolox will only save latest and best ckpt.
-        self.save_history_ckpt = False  # True
-        # name of experiment
-        self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
-
-        # -----------------  testing config ------------------ #
-        # output image size during evaluation/test
-        self.test_size = self.img_size or (1280, 1280)  # (height, width)
-        # confidence threshold during evaluation/test,
-        # boxes whose scores are less than test_conf will be filtered
-        self.test_conf = 0.01
-        # nms threshold
-        self.nmsthre = 0.65
-
-    def merge(self, cfg_list):
-        merge_cfg(self, cfg_list)
-        tag(self)
-        check_exp_value(self)
-
-    def get_dataset(self, cache: bool = False, cache_type: str = "ram"):
-        """
-        Get dataset according to cache and cache_type parameters.
-        Args:
-            cache (bool): Whether to cache imgs to ram or disk.
-            cache_type (str, optional): Defaults to "ram".
-                "ram" : Caching imgs to ram for fast training.
-                "disk": Caching imgs to disk for fast training.
-        """
-        from yolox.data import COCODataset, TrainTransform
-        from .coco_dataset import COCODataset
-
-        return COCODataset(
-            name=self.train_ann.split("annotation_")[-1].removesuffix(".json"),
-            data_dir=self.data_dir,
-            json_file=self.train_ann,
-            img_size=self.input_size,
-            preproc=TrainTransform(
-                max_labels=50,
-                flip_prob=self.flip_prob,
-                hsv_prob=self.hsv_prob
-            ),
-            cache=cache,
-            cache_type=cache_type,
-        )
-
-    def get_eval_dataset(self, **kwargs):
-        from yolox.data import COCODataset, ValTransform
-        from .coco_dataset import COCODataset
-        testdev = kwargs.get("testdev", False)
-        legacy = kwargs.get("legacy", False)
-        ann_file = self.val_ann if not testdev else self.test_ann
-
-        def read_useful_info(coco):
-            coco.dataset["info"] = None
-            return coco
-
-        coco_dataset = COCODataset(
-            name=ann_file.split("annotation_")[-1].removesuffix(".json"),
-            data_dir=self.data_dir,
-            json_file=ann_file,
+        return COCOEvaluator(
+            dataloader=self.get_eval_loader(batch_size, is_distributed,
+                                            testdev=testdev, legacy=legacy),
             img_size=self.test_size,
-            preproc=ValTransform(legacy=legacy),
+            confthre=self.test_conf,
+            nmsthre=self.nmsthre,
+            num_classes=self.num_classes,
+            testdev=testdev,
         )
-        read_useful_info(coco_dataset.coco)
-        return coco_dataset
+
+    def get_optimizer(self, batch_size):
+        optimizer = super().get_optimizer(batch_size)
+
+        cls_feat_proj_head_params = [
+            p for k, p in self.model.named_parameters()
+            if p.requires_grad and "cls_feat_proj_head" in k
+        ]
+
+        if cls_feat_proj_head_params:
+            if self.warmup_epochs > 0:
+                lr = self.warmup_lr
+            else:
+                # or is parent default
+                lr = getattr(self, "cls_feat_proj_head_lr", None) or self.basic_lr_per_img * batch_size
+
+            ids = {id(p) for p in cls_feat_proj_head_params}
+            for group in self.optimizer.param_groups:
+                group['params'] = [p for p in group['params'] if id(p) not in ids]
+
+            self.optimizer.add_param_group({
+                "params": cls_feat_proj_head_params,
+                "lr": lr,
+                "weight_decay": self.weight_decay,
+            })
+            warnings.warn(f"[Modded] Moved cls_feat_proj_head to new group lr={lr}")
+
+        return self.optimizer
+
+    def get_trainer(self, args):
+        from .trainer import Trainer
+        trainer = Trainer(self, args)
+        # NOTE: trainer shouldn't be an attribute of exp object
+        return trainer
+
+    def get_model(self):
+        from yolox.models import YOLOPAFPN
+        from .yolox import YOLOX
+        from .yolox_head_full import YOLOXHead
+
+        def init_yolo(M):
+            for m in M.modules():
+                if isinstance(m, nn.BatchNorm2d):
+                    m.eps = 1e-3
+                    m.momentum = 0.03
+
+        if getattr(self, "model", None) is None:
+            in_channels = [256, 512, 1024]
+            backbone = YOLOPAFPN(self.depth, self.width, in_channels=in_channels, act=self.act)
+
+            weights = getattr(self, "_class_weights", None) or class_weights[getattr(self, "class_weights", None)]
+            class_loss = ClassLossWeighted(**weights)
+
+            cls_feat_loss = None
+            cls_feat_proj_head = None
+            if self.cls_feat_loss is not None:
+                kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
+                cls_feat_loss = getattr(self, "_cls_feat_loss", None) or ClsFeatLoss(**kwargs)
+                cls_feat_proj_head = (
+                    (getattr(self, "_cls_feat_proj_head", None) or ClsFeatProjHead(**kwargs))
+                    if kwargs["proj_head"] is not None
+                    else None
+                )
+
+            head = YOLOXHead(self.num_classes, self.width, in_channels=in_channels, act=self.act,
+                             class_loss=class_loss,
+                             cls_feat=float(self.cls_feat) if self.cls_feat is not None else None,
+                             cls_feat_loss=cls_feat_loss,
+                             cls_feat_proj_head=cls_feat_proj_head)
+            self.model = YOLOX(backbone, head)
+
+        self.model.apply(init_yolo)
+        self.model.head.initialize_biases(1e-2)
+        self.model.train()
+        return self.model
+
+    def get_cls_feat_scheduler(self, cls_feat):
+        from .cls_feat_scheduler import ClsFeatScheduler
+        kwargs = {k.removeprefix("cls_feat_"): v for k, v in vars(self).items() if k.startswith("cls_feat_")}
+        scheduler = ClsFeatScheduler(
+            getattr(self, "cls_feat_scheduler", None) or "constant",
+            cls_feat or 0,
+            self.max_epoch,
+            **kwargs
+        )
+        return scheduler

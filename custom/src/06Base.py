@@ -1,9 +1,9 @@
 import os
 
-from mods import ExpFull
+from mods import ExpBase
 
 
-class Exp(ExpFull):
+class Exp(ExpBase):
     def __init__(self):
         super().__init__()
         self.class_weights = None

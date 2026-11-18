@@ -54,6 +54,13 @@ class Trainer(_Trainer):
         super().__init__(exp, args)
         self.cls_feat_scheduler = None
 
+    def train(self):
+        try:
+            super().train()
+        except Exception:
+            logger.exception("Training failed")
+            raise SystemExit(1)
+
     def before_train(self):
         # >>> MOD
         if self.rank == 0 and self.args.exp_file:
