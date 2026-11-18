@@ -77,6 +77,7 @@ python tools/train.py \
 TRAIN_STATUS=$?
 
 # ----- CLEANUP -----------------------------------------------------
+# Accepted risk: cleanup deletes local W&B recovery data even if every sync attempt fails.
 KEEP_FILES=("last_epoch_ckpt.pth" "exp.py")
 
 for i in 1 2 3 4 5; do
