@@ -70,7 +70,7 @@ class Exp(_Exp):
     def get_model(self):
         from yolox.models import YOLOPAFPN
         from .yolox import YOLOX
-        from .yolox_head import YOLOXHead
+        from .yolox_head_base import YOLOXHead
 
         def init_yolo(M):
             for m in M.modules():
