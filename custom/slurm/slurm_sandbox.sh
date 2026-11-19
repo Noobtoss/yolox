@@ -24,10 +24,16 @@ conda activate conda-yolox
 export PYTHONPATH="$ROOT/custom/src:$PYTHONPATH"
 
 # ----- GET ARGS ----------------------------------------------------
-EXP_MAP_FILE="$ROOT/custom/slurm/experiments_map.txt"
 EXP_ARGS_FILE="$ROOT/custom/slurm/experiments.json"
 
-RUN_NAME=$(grep -v '^[[:space:]]*#' "$EXP_MAP_FILE" | awk -v id="$SLURM_ARRAY_TASK_ID" '$1 == id {print $2; exit}')
+RUN_NAME=$(python -c '
+import json, sys
+experiments = json.load(open(sys.argv[1]))
+task_id = int(sys.argv[2])
+if not 1 <= task_id <= len(experiments):
+    sys.exit(f"ERROR: task id {task_id} is outside 1-{len(experiments)}")
+print(list(experiments)[task_id - 1])
+' "$EXP_ARGS_FILE" "$SLURM_ARRAY_TASK_ID") || exit 1
 
 ARGS=$(python -c '
 import json, sys
@@ -52,7 +58,8 @@ CKPT="${KV[ckpt]:-checkpoints/yolox_x.pth}"
 ARGS="$ARGS run_name $RUN_NAME"
 
 # ----- WANDB -------------------------------------------------------
-export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
+# export WANDB_API_KEY=95177947f5f36556806da90ea7a0bf93ed857d58
+export WANDB_API_KEY=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
 export WANDB_CACHE_DIR=$TMPDIR
 export WANDB_DATA_DIR=$TMPDIR
 export WANDB_DIR=$TMPDIR

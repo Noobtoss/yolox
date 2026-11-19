@@ -1,3 +1,4 @@
+import json
 import re
 import sys
 
@@ -14,29 +15,22 @@ def parse_array_ids(array_str):
     return ids
 
 def experiments_read(text, task_ids):
-    exp_by_id = {}
-    for line in text.splitlines():
-        line = line.split('#')[0].strip()
-        if not line:
-            continue
-        parts = line.split()
-        if parts[0].isdigit():
-            exp_by_id[int(parts[0])] = parts[1] if len(parts) > 1 else "?"
+    names = list(json.loads(text))
 
     experiments = []
     for task_id in task_ids:
-        if task_id not in exp_by_id:
-            experiments.append(f"Warning: task_id {task_id} not found in exp map, skipping.")
+        if not 1 <= task_id <= len(names):
+            experiments.append(f"Warning: task_id {task_id} not found in experiments, skipping.")
         else:
-            experiments.append(exp_by_id[task_id])
+            experiments.append(names[task_id - 1])
     return experiments
 
 if __name__ == "__main__":
     array_str = sys.argv[1] if len(sys.argv) > 1 else "1-3"
-    map_file  = sys.argv[2] if len(sys.argv) > 2 else "experiments_map.txt"
+    experiments_file = sys.argv[2] if len(sys.argv) > 2 else "experiments.json"
     task_ids  = parse_array_ids(array_str)
 
-    with open(map_file, "r") as f:
+    with open(experiments_file, "r") as f:
         text = f.read()
 
     run_names = experiments_read(text, task_ids)
