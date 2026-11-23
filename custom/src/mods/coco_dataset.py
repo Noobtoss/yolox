@@ -35,6 +35,9 @@ class COCODataset(_COCODataset):
 
         # >>> MOD
         self.coco = COCO(os.path.join(self.data_dir, self.json_file))
+        # Skip empty annotations.
+        self.coco.dataset["annotations"] = [ann for ann in self.coco.dataset["annotations"] if ann["area"] > 0]
+        self.coco.createIndex()
         # <<< MOD
         remove_useless_info(self.coco)
         self.ids = self.coco.getImgIds()
