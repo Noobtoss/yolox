@@ -1,4 +1,22 @@
 {
+  "07Demo": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "imgsz": 1280,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "experiments/07Demo/annotation_train.json",
+    "val_ann": "experiments/07Demo/annotation_test.json",
+    "epochs": 50
+  },
+  "07DemoSuperCat": {
+    "exp": "custom/src/06Base.py",
+    "ckpt": "checkpoints/yolox_x.pth",
+    "imgsz": 1280,
+    "data_dir": "../../data_hub/datasets",
+    "train_ann": "experiments/07DemoSuperCat/annotation_train.json",
+    "val_ann": "experiments/07DemoSuperCat/annotation_test.json",
+    "epochs": 50
+  },
   "04": {
     "exp": "custom/src/06Base.py",
     "ckpt": "checkpoints/yolox_x.pth",
