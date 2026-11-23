@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 from pathlib import Path
 from yolox.exp import Exp as _Exp
 
@@ -47,11 +48,11 @@ def merge_cfg(exp: _Exp, cfg_list):
     cfg_list[1::2] = [VALUE_MAPPING[key](value) if key in VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
     vars(exp).update({key: None for key, value in vars(exp).items() if isinstance(value, str) and value == "None"})
-    update_model_scale(exp)
-    update_class_names(exp)
+    update_scale(exp)
+    update_classes(exp)
 
 
-def update_model_scale(exp):
+def update_scale(exp):
     scales = {
         "yolox_s": (0.33, 0.50),
         "yolox_m": (0.67, 0.75),
@@ -69,9 +70,10 @@ def update_model_scale(exp):
     exp.cls_feat_dim = int(256 * exp.width)
 
 
-def update_class_names(exp):
+def update_classes(exp):
     with (Path(exp.data_dir) / exp.train_ann).open() as f:
-        names = {c["id"]: c["name"] for c in json.load(f)["categories"]}
+        categories = json.load(f)["categories"]
+    names = {c["id"]: c["name"] for c in categories}
     if exp.names != names or exp.num_classes != len(names):
         print(f"WARNING: Updating class names and num_classes ({exp.num_classes} -> {len(names)}) "
               f"from training annotations: {exp.train_ann}")
