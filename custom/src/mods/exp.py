@@ -47,7 +47,9 @@ def merge_cfg(exp: _Exp, cfg_list):
     cfg_list = [item for key, value in zip(cfg_list[0::2], cfg_list[1::2]) for target in aliases.get(key, (key,)) for item in (target, value)]
     cfg_list[1::2] = [VALUE_MAPPING[key](value) if key in VALUE_MAPPING else value for key, value in zip(cfg_list[0::2], cfg_list[1::2])]
     _Exp.merge(exp, cfg_list)
-    vars(exp).update({key: None for key, value in vars(exp).items() if isinstance(value, str) and value == "None"})
+    for key, value in vars(exp).items():
+        if isinstance(value, str) and value == "None":
+            setattr(exp, key, None)
     update_scale(exp)
     update_classes(exp)
 
