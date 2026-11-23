@@ -72,11 +72,16 @@ def update_scale(exp):
 
 def update_classes(exp):
     with (Path(exp.data_dir) / exp.train_ann).open() as f:
-        categories = json.load(f)["categories"]
-    names = {c["id"]: c["name"] for c in categories}
+        categories_train = json.load(f)["categories"]
+    with (Path(exp.data_dir) / exp.val_ann).open() as f:
+        categories_test = json.load(f)["categories"]
+    names = {}
+    for c in categories_train + categories_test:
+        assert c["id"] not in names or names[c["id"]] == c["name"], f"Conflicting names for category ID {c['id']}"
+        names[c["id"]] = c["name"]
     if exp.names != names or exp.num_classes != len(names):
         print(f"WARNING: Updating class names and num_classes ({exp.num_classes} -> {len(names)}) "
-              f"from training annotations: {exp.train_ann}")
+              f"from training and validation annotations: {exp.train_ann}, {exp.val_ann}")
         exp.names = names
         exp.num_classes = len(names)
 
@@ -246,6 +251,7 @@ class Exp(_Exp):
             ),
             cache=cache,
             cache_type=cache_type,
+            names=self.names,
         )
 
     def get_eval_dataset(self, **kwargs):
@@ -265,6 +271,7 @@ class Exp(_Exp):
             json_file=ann_file,
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),
+            names=self.names,
         )
         read_useful_info(coco_dataset.coco)
         return coco_dataset

@@ -9,6 +9,7 @@ from yolox.data.datasets.coco import COCODataset as _COCODataset
 
 
 class COCODataset(_COCODataset):
+    # >>> MOD
     def __init__(
             self,
             data_dir=None,
@@ -18,6 +19,7 @@ class COCODataset(_COCODataset):
             preproc=None,
             cache=False,
             cache_type="ram",
+            names=None,
     ):
         """
         COCO dataset initialization. Annotation data are read into memory by COCO API.
@@ -27,7 +29,9 @@ class COCODataset(_COCODataset):
             name (str): COCO data name (e.g. 'train2017' or 'val2017')
             img_size (int): target image size after pre-processing
             preproc: data augmentation strategy
+            names (dict, optional): shared category ID to name mapping
         """
+        # <<< MOD
         if data_dir is None:
             data_dir = os.path.join(get_yolox_datadir(), "COCO")
         self.data_dir = data_dir
@@ -42,9 +46,13 @@ class COCODataset(_COCODataset):
         remove_useless_info(self.coco)
         self.ids = self.coco.getImgIds()
         self.num_imgs = len(self.ids)
-        self.class_ids = sorted(self.coco.getCatIds())
+        # >>> MOD
+        if names is None:
+            names = {c["id"]: c["name"] for c in self.cats}
+        self.class_ids = sorted(names)
         self.cats = self.coco.loadCats(self.coco.getCatIds())
-        self._classes = tuple([c["name"] for c in self.cats])
+        self._classes = tuple(names[class_id] for class_id in self.class_ids)
+        # <<< MOD
         self.name = name
         self.img_size = img_size
         self.preproc = preproc
