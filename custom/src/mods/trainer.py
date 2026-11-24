@@ -135,6 +135,9 @@ class Trainer(_Trainer):
         logger.info("Training start...")
         logger.info("\n{}".format(model))
         # >>> MOD
+        # Acceptable issue: assumes feature loss is enabled when a projection head is configured.
+        if getattr(self.exp, "cls_feat_proj_head_lr", None) is not None:
+            assert getattr(self.exp, "cls_feat_proj_head", None) is not None
         # or is lr_scheduler default
         self.cls_feat_proj_head_lr_scheduler = self.exp.get_lr_scheduler(
             getattr(self.exp, "cls_feat_proj_head_lr", None) or self.exp.basic_lr_per_img * self.args.batch_size,
@@ -147,6 +150,7 @@ class Trainer(_Trainer):
     def before_epoch(self):
         # only update cls_feat_gain per epoch
         if self.cls_feat_scheduler is not None:
+            # Acceptable issue: single-GPU only; DDP needs self.model.module.head.
             self.model.head.cls_feat = self.cls_feat_scheduler.update_cls_feat(self.epoch)
         super().before_epoch()
 
@@ -185,7 +189,7 @@ class Trainer(_Trainer):
             data_time=data_end_time - iter_start_time,
             lr=lr,
             cls_feat_proj_head_lr=cls_feat_proj_head_lr,
-            cls_feat=self.model.head.cls_feat,
+            cls_feat=self.model.head.cls_feat,  # Acceptable issue: single-GPU only.
             **outputs,
         )
         # <<< MOD

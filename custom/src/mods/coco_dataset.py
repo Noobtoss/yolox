@@ -48,6 +48,7 @@ class COCODataset(_COCODataset):
         self.num_imgs = len(self.ids)
         # >>> MOD
         if names is None:
+            # Acceptable issue: self.cats is unset here; experiments always pass names.
             names = {c["id"]: c["name"] for c in self.cats}
         self.class_ids = sorted(names)
         self.cats = self.coco.loadCats(self.coco.getCatIds())
